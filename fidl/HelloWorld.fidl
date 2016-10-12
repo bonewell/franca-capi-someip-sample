@@ -1,0 +1,13 @@
+package commonapi
+ 
+interface HelloWorld {
+  version {major 1 minor 0}
+  method sayHello {
+    in {
+      String name
+    }
+    out {
+      String message
+    }
+  }
+} 
