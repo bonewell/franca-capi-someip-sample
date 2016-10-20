@@ -4,28 +4,28 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -std=c++0x")
 include_directories(
     src-gen
     ../capicxx-core-runtime/include
-    ../capicxx-dbus-runtime/include
-    ../dbus
+    ../capicxx-someip-runtime/include
+    ../vsomeip/interface
 )
  
 link_directories(
     /home/kolodiy/git/capicxx-core-runtime/build
-    /home/kolodiy/git/capicxx-dbus-runtime/build
-    /home/kolodiy/git/dbus/dbus/.libs
+    /home/kolodiy/git/capicxx-someip-runtime/build/lib
+    /home/kolodiy/git/vsomeip/build
 )
  
 add_executable(HelloWorldClient
     src/HelloWorldClient.cpp
-    src-gen/v1/commonapi/HelloWorldDBusProxy.cpp
-    src-gen/v1/commonapi/HelloWorldDBusDeployment.cpp
+    src-gen/v1/commonapi/HelloWorldSomeIPProxy.cpp
+    src-gen/v1/commonapi/HelloWorldSomeIPDeployment.cpp
 )
-target_link_libraries(HelloWorldClient CommonAPI CommonAPI-DBus dbus-1)
+target_link_libraries(HelloWorldClient CommonAPI CommonAPI-SomeIP vsomeip)
 
 add_executable(HelloWorldService
     src/HelloWorldService.cpp
     src/HelloWorldStubImpl.cpp
-    src-gen/v1/commonapi/HelloWorldDBusStubAdapter.cpp
+    src-gen/v1/commonapi/HelloWorldSomeIPStubAdapter.cpp
     src-gen/v1/commonapi/HelloWorldStubDefault.cpp
-    src-gen/v1/commonapi/HelloWorldDBusDeployment.cpp
+    src-gen/v1/commonapi/HelloWorldSomeIPDeployment.cpp
 )
-target_link_libraries(HelloWorldService CommonAPI CommonAPI-DBus dbus-1)
+target_link_libraries(HelloWorldService CommonAPI CommonAPI-SomeIP vsomeip)
