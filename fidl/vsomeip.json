@@ -1,0 +1,37 @@
+{
+    "unicast" : "172.16.47.1",
+    "logging" :
+    {
+        "level" : "debug",
+        "console" : "true",
+        "file" : { "enable" : "false", "path" : "/var/log/vsomeip.log" },
+        "dlt" : "false"
+    },
+    "applications" : 
+    [
+        {
+            "name" : "client-sample",
+            "id" : "0x1343"
+        },
+        {
+            "name" : "service-sample",
+            "id" : "0x1277"
+        }            
+    ],
+    "services" :
+    [
+        {
+            "service" : "0x1234",
+            "instance" : "0x5678",
+            "unreliable" : "31000"
+        }
+    ],
+    "routing" : "vsomeipd",
+    "service-discovery" :
+    {
+        "enable" : "false",
+        "multicast" : "224.244.224.245",
+        "port" : "30490",
+        "protocol" : "udp"
+    }
+}
