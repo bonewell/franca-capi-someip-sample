@@ -10,8 +10,7 @@ include_directories(
  
 link_directories(
     /home/kolodiy/git/capicxx-core-runtime/build
-    /home/kolodiy/git/capicxx-someip-runtime/build/lib
-    /home/kolodiy/git/vsomeip/build
+    /home/kolodiy/git/capicxx-someip-runtime/build
 )
  
 add_executable(HelloWorldClient
@@ -19,7 +18,7 @@ add_executable(HelloWorldClient
     src-gen/v1/commonapi/HelloWorldSomeIPProxy.cpp
     src-gen/v1/commonapi/HelloWorldSomeIPDeployment.cpp
 )
-target_link_libraries(HelloWorldClient CommonAPI CommonAPI-SomeIP vsomeip)
+target_link_libraries(HelloWorldClient CommonAPI CommonAPI-SomeIP)
 
 add_executable(HelloWorldService
     src/HelloWorldService.cpp
@@ -28,4 +27,4 @@ add_executable(HelloWorldService
     src-gen/v1/commonapi/HelloWorldStubDefault.cpp
     src-gen/v1/commonapi/HelloWorldSomeIPDeployment.cpp
 )
-target_link_libraries(HelloWorldService CommonAPI CommonAPI-SomeIP vsomeip)
+target_link_libraries(HelloWorldService CommonAPI CommonAPI-SomeIP)
