@@ -1,0 +1,31 @@
+{
+    "unicast" : "172.16.47.138",
+    "netmask" : "255.255.255.0",
+    "logging" :
+    {
+        "level" : "debug",
+        "console" : "true",
+        "file" : { "enable" : "false", "path" : "/var/log/vsomeip.log" },
+        "dlt" : "false"
+    },
+    "applications" : 
+    [
+        {
+            "name" : "client-sample",
+            "id" : "0x1343"
+        }
+    ],
+    "clients" :
+    [
+        {
+            "service" : "0x1234",
+            "instance" : "0x5678",
+            "reliable" : [ "31001" ]
+        }
+    ],
+    "routing" : "client-sample",
+    "service-discovery" :
+    {
+        "enable" : "false"
+    }
+}

@@ -10,8 +10,8 @@
     "applications" : 
     [
         {
-            "name" : "client-sample",
-            "id" : "0x1343"
+            "name" : "vsomeipd",
+            "id" : "0x0022"
         },
         {
             "name" : "service-sample",
@@ -23,15 +23,13 @@
         {
             "service" : "0x1234",
             "instance" : "0x5678",
-            "unreliable" : "31000"
+            "reliable" : { "port" : "31000", "enable-magic-cookies" : "false" }
         }
+        
     ],
     "routing" : "vsomeipd",
     "service-discovery" :
     {
-        "enable" : "false",
-        "multicast" : "224.244.224.245",
-        "port" : "30490",
-        "protocol" : "udp"
+        "enable" : "false"
     }
 }
