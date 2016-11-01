@@ -1,5 +1,5 @@
 {
-    "unicast" : "172.16.47.138",
+    "unicast" : "172.16.47.139",
     "netmask" : "255.255.255.0",
     "logging" :
     {
@@ -15,12 +15,13 @@
             "id" : "0x1343"
         }
     ],
-    "clients" :
+    "services" :
     [
         {
             "service" : "0x1234",
             "instance" : "0x5678",
-            "reliable" : [ "31001" ]
+            "unicast" : "172.16.47.138",
+            "unreliable" : "30509"
         }
     ],
     "routing" : "client-sample",
