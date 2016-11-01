@@ -10,6 +10,10 @@ int main() {
     std::shared_ptr < CommonAPI::Runtime > runtime = CommonAPI::Runtime::get();
     std::shared_ptr<HelloWorldProxy<>> myProxy = runtime->buildProxy<HelloWorldProxy>("local", "test");
  
+    if (!myProxy) {
+        std::cout << "Could not build proxy" << std::endl;
+        return 1;
+    }
     std::cout << "Checking availability!" << std::endl;
     while (!myProxy->isAvailable())
         usleep(10);
