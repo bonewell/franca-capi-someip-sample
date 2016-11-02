@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -std=c++0x")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -std=c++11")
  
 include_directories(
     src-gen
@@ -13,18 +13,21 @@ link_directories(
     /home/kolodiy/git/capicxx-someip-runtime/build
 )
  
-add_executable(HelloWorldClient
-    src/HelloWorldClient.cpp
-    src-gen/v1/commonapi/HelloWorldSomeIPProxy.cpp
-    src-gen/v1/commonapi/HelloWorldSomeIPDeployment.cpp
+add_executable(client
+    src/client.cpp
 )
-target_link_libraries(HelloWorldClient CommonAPI CommonAPI-SomeIP)
+target_link_libraries(client CommonAPI)
 
-add_executable(HelloWorldService
-    src/HelloWorldService.cpp
-    src/HelloWorldStubImpl.cpp
-    src-gen/v1/commonapi/HelloWorldSomeIPStubAdapter.cpp
-    src-gen/v1/commonapi/HelloWorldStubDefault.cpp
-    src-gen/v1/commonapi/HelloWorldSomeIPDeployment.cpp
+add_executable(service
+    src/service.cpp
+    src/stub.cpp
+    src-gen/v1/ford/rnd/MLStubDefault.cpp
 )
-target_link_libraries(HelloWorldService CommonAPI CommonAPI-SomeIP)
+target_link_libraries(service CommonAPI)
+
+add_library(ML SHARED
+    src-gen/v1/ford/rnd/MLSomeIPStubAdapter.cpp
+    src-gen/v1/ford/rnd/MLSomeIPDeployment.cpp
+    src-gen/v1/ford/rnd/MLSomeIPProxy.cpp
+)
+target_link_libraries(ML CommonAPI-SomeIP)

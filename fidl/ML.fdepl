@@ -1,0 +1,18 @@
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP_deployment_spec.fdepl"
+
+import "ML.fidl"
+
+define org.genivi.commonapi.someip.deployment for interface ford.rnd.ML {
+  SomeIpServiceID = 4660
+
+  method sayHello {
+    SomeIpMethodID = 32000
+  }
+}
+
+define org.genivi.commonapi.someip.deployment for provider FordRndService {
+  instance ford.rnd.ML {
+    InstanceId = "ford.rnd.ML"
+    SomeIpInstanceID = 22136
+  }
+}

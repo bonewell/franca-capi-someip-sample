@@ -1,14 +1,16 @@
 #include <iostream>
 #include <thread>
 #include <CommonAPI/CommonAPI.hpp>
-#include "HelloWorldStubImpl.hpp"
+#include "stub.hpp"
  
 using namespace std;
  
 int main() {
+    std::string domain = "local";
+    std::string instance = "ford.rnd.ML";
     std::shared_ptr<CommonAPI::Runtime> runtime = CommonAPI::Runtime::get();
-    std::shared_ptr<HelloWorldStubImpl> myService = std::make_shared<HelloWorldStubImpl>();
-    runtime->registerService("local", "test", myService);
+    std::shared_ptr<Stub> myService = std::make_shared<Stub>();
+    runtime->registerService(domain, instance, myService);
     std::cout << "Successfully Registered Service!" << std::endl;
  
     while (true) {

@@ -2,13 +2,15 @@
 #include <string>
 #include <unistd.h>
 #include <CommonAPI/CommonAPI.hpp>
-#include <v1/commonapi/HelloWorldProxy.hpp>
+#include <v1/ford/rnd/MLProxy.hpp>
  
-using namespace v1_0::commonapi;
+using namespace v1_0::ford::rnd;
  
 int main() {
+    std::string domain = "local";
+    std::string instance = "ford.rnd.ML";
     std::shared_ptr < CommonAPI::Runtime > runtime = CommonAPI::Runtime::get();
-    std::shared_ptr<HelloWorldProxy<>> myProxy = runtime->buildProxy<HelloWorldProxy>("local", "test");
+    std::shared_ptr<MLProxy<>> myProxy = runtime->buildProxy<MLProxy>(domain, instance);
  
     if (!myProxy) {
         std::cout << "Could not build proxy" << std::endl;
