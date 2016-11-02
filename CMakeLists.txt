@@ -1,16 +1,26 @@
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -std=c++11")
- 
+set(COMMONAPI_PATH /home/kolodiy/git)
+
+set(capi-core-gen ${COMMONAPI_PATH}/capicxx-core-tools/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-generator-linux-x86_64 -sk fidl/ML.fidl)
+
+add_custom_command(OUTPUT
+    ${CMAKE_SOURCE_DIR}/src-gen/v1/ford/rnd/MLStubDefault.cpp
+    COMMAND ${capi-core-gen}
+    DEPENDS fidl/ML.fidl
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Generate core CommonAPI files")
+
 include_directories(
     src-gen
-    ../capicxx-core-runtime/include
-    ../capicxx-someip-runtime/include
-    ../vsomeip/interface
+    ${COMMONAPI_PATH}/capicxx-core-runtime/include
+    ${COMMONAPI_PATH}/capicxx-someip-runtime/include
+    ${COMMONAPI_PATH}/vsomeip/interface
 )
  
 link_directories(
-    /home/kolodiy/git/capicxx-core-runtime/build
-    /home/kolodiy/git/capicxx-someip-runtime/build
+    ${COMMONAPI_PATH}/capicxx-core-runtime/build
+    ${COMMONAPI_PATH}/capicxx-someip-runtime/build
 )
  
 add_executable(client
@@ -21,13 +31,33 @@ target_link_libraries(client CommonAPI)
 add_executable(service
     src/service.cpp
     src/stub.cpp
-    src-gen/v1/ford/rnd/MLStubDefault.cpp
+    ${CMAKE_SOURCE_DIR}/src-gen/v1/ford/rnd/MLStubDefault.cpp
 )
 target_link_libraries(service CommonAPI)
 
+add_dependencies(client service)
+
+set(capi-someip-gen ${COMMONAPI_PATH}/capicxx-someip-tools/org.genivi.commonapi.someip.cli.product/target/products/org.genivi.commonapi.someip.cli.product/linux/gtk/x86_64/commonapi-someip-generator-linux-x86_64 fidl/ML.fdepl)
+
+add_custom_command(OUTPUT
+    ${CMAKE_SOURCE_DIR}/src-gen/v1/ford/rnd/MLSomeIPStubAdapter.cpp
+    ${CMAKE_SOURCE_DIR}/src-gen/v1/ford/rnd/MLSomeIPDeployment.cpp
+    ${CMAKE_SOURCE_DIR}/src-gen/v1/ford/rnd/MLSomeIPProxy.cpp
+    COMMAND ${capi-someip-gen}
+    DEPENDS fidl/ML.fdepl
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Generate SOME/IP CommonAPI files")
+
+
 add_library(ML SHARED
-    src-gen/v1/ford/rnd/MLSomeIPStubAdapter.cpp
-    src-gen/v1/ford/rnd/MLSomeIPDeployment.cpp
-    src-gen/v1/ford/rnd/MLSomeIPProxy.cpp
+    ${CMAKE_SOURCE_DIR}/src-gen/v1/ford/rnd/MLSomeIPStubAdapter.cpp
+    ${CMAKE_SOURCE_DIR}/src-gen/v1/ford/rnd/MLSomeIPDeployment.cpp
+    ${CMAKE_SOURCE_DIR}/src-gen/v1/ford/rnd/MLSomeIPProxy.cpp
 )
 target_link_libraries(ML CommonAPI-SomeIP)
+
+file(COPY
+    config/commonapi.ini
+    config/vsomeip-service.json
+    config/vsomeip-client.json
+    DESTINATION ${CMAKE_BINARY_DIR})
