@@ -1,10 +1,10 @@
 {
-    "unicast" : "172.16.47.1",
+    "unicast" : "172.16.47.138",
     "logging" :
     {
         "level" : "debug",
         "console" : "true",
-        "file" : { "enable" : "false", "path" : "/var/log/vsomeip.log" },
+        "file" : { "enable" : "false", "path" : "vsomeip.log" },
         "dlt" : "false"
     },
     "applications" : 
@@ -23,7 +23,8 @@
         {
             "service" : "0x1234",
             "instance" : "0x5678",
-            "reliable" : { "port" : "31000", "enable-magic-cookies" : "false" }
+            "reliable" : { "port" : "31000", "enable-magic-cookies" : "false" },
+            "unreliable" : "30600"
         }
         
     ],

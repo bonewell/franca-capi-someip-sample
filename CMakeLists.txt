@@ -58,7 +58,8 @@ target_link_libraries(ML CommonAPI-SomeIP)
 
 install(TARGETS client service ML
     RUNTIME DESTINATION ${CMAKE_BINARY_DIR}/bin
-    LIBRARY DESTINATION ${CMAKE_BINARY_DIR}/lib)
+    LIBRARY DESTINATION ${CMAKE_BINARY_DIR}/lib
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
 
 install(DIRECTORY config
     DESTINATION ${CMAKE_BINARY_DIR})
@@ -66,3 +67,19 @@ install(DIRECTORY config
 install(DIRECTORY scripts
     DESTINATION ${CMAKE_BINARY_DIR}
     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+
+install(FILES
+    ${COMMONAPI_PATH}/capicxx-core-runtime/build/libCommonAPI.so
+    ${COMMONAPI_PATH}/capicxx-core-runtime/build/libCommonAPI.so.3.1.9
+    ${COMMONAPI_PATH}/capicxx-someip-runtime/build/libCommonAPI-SomeIP.so
+    ${COMMONAPI_PATH}/capicxx-someip-runtime/build/libCommonAPI-SomeIP.so.3.1.9
+    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip.so
+    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip.so.2
+    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip.so.2.4.2
+    DESTINATION ${CMAKE_BINARY_DIR}/lib
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+
+install(FILES
+    ${COMMONAPI_PATH}/vsomeip/build/daemon/vsomeipd
+    DESTINATION ${CMAKE_BINARY_DIR}/bin
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)

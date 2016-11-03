@@ -5,7 +5,7 @@
     {
         "level" : "debug",
         "console" : "true",
-        "file" : { "enable" : "false", "path" : "/var/log/vsomeip.log" },
+        "file" : { "enable" : "false", "path" : "vsomeip.log" },
         "dlt" : "false"
     },
     "applications" : 
@@ -21,7 +21,7 @@
             "service" : "0x1234",
             "instance" : "0x5678",
             "unicast" : "172.16.47.138",
-            "unreliable" : "30509"
+            "unreliable" : "30600"
         }
     ],
     "routing" : "client-sample",
