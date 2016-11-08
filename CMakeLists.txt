@@ -75,7 +75,13 @@ install(FILES
     ${COMMONAPI_PATH}/capicxx-someip-runtime/build/libCommonAPI-SomeIP.so.3.1.9
     ${COMMONAPI_PATH}/vsomeip/build/libvsomeip.so
     ${COMMONAPI_PATH}/vsomeip/build/libvsomeip.so.2
-    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip.so.2.4.2
+    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip.so.2.5.0
+    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip-sd.so
+    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip-sd.so.2
+    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip-sd.so.2.5.0
+    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip-cfg.so
+    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip-cfg.so.2
+    ${COMMONAPI_PATH}/vsomeip/build/libvsomeip-cfg.so.2.5.0
     DESTINATION ${CMAKE_BINARY_DIR}/lib
     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
 
