@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+sudo route add -net 224.0.0.0/4 dev ens33
 export LD_LIBRARY_PATH=../lib:$LD_LIBRARY_PATH
 export VSOMEIP_APPLICATION_NAME=client-sample
 export VSOMEIP_CONFIGURATION=../config/vsomeip-client.json

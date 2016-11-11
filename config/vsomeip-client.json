@@ -15,18 +15,16 @@
             "id" : "0x1343"
         }
     ],
-    "services" :
+    "clients" :
     [
         {
             "service" : "0x1234",
-            "instance" : "0x5678",
-            "unicast" : "172.16.47.138",
-            "unreliable" : "30600"
+            "instance" : "0x5678"
         }
     ],
     "routing" : "client-sample",
     "service-discovery" :
     {
-        "enable" : "false"
+        "enable" : "true"
     }
 }

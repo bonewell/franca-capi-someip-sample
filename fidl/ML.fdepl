@@ -7,6 +7,7 @@ define org.genivi.commonapi.someip.deployment for interface ford.rnd.ML {
 
   method sayHello {
     SomeIpMethodID = 32000
+    SomeIpReliable = true
   }
 }
 

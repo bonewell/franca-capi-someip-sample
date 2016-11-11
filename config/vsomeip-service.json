@@ -23,14 +23,13 @@
         {
             "service" : "0x1234",
             "instance" : "0x5678",
-            "reliable" : { "port" : "31000", "enable-magic-cookies" : "false" },
-            "unreliable" : "30600"
+            "reliable" : { "port" : "31000", "enable-magic-cookies" : "false" }
         }
         
     ],
     "routing" : "vsomeipd",
     "service-discovery" :
     {
-        "enable" : "false"
+        "enable" : "true"
     }
 }
