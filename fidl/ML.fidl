@@ -10,4 +10,13 @@ interface ML {
       String message
     }
   }
+
+  method howMuch {
+    out {
+      UInt64 currency
+    }
+    error {
+      NOT_POLITE
+    }
+  }
 } 

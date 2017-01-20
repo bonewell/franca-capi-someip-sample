@@ -9,6 +9,10 @@ define org.genivi.commonapi.someip.deployment for interface ford.rnd.ML {
     SomeIpMethodID = 32000
     SomeIpReliable = true
   }
+
+  method howMuch {
+    SomeIpMethodID = 32002
+  }
 }
 
 define org.genivi.commonapi.someip.deployment for provider FordRndService {
