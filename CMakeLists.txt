@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -std=c++11")
-set(COMMONAPI_PATH /home/kolodiy/git)
+set(COMMONAPI_PATH /home/kolodiy/git/genivi)
 
 set(capi-core-gen ${COMMONAPI_PATH}/capicxx-core-tools/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-generator-linux-x86_64 --dest ${CMAKE_BINARY_DIR}/src-gen --skel fidl/ML.fidl)
 
