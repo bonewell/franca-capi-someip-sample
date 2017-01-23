@@ -11,7 +11,14 @@ define org.genivi.commonapi.someip.deployment for interface ford.rnd.ML {
   }
 
   method howMuch {
-    SomeIpMethodID = 32002
+    SomeIpMethodID = 32001
+    SomeIpReliable = true
+  }
+
+  broadcast getOut {
+    SomeIpEventID = 34000
+    SomeIpReliable = true
+    SomeIpEventGroups = { 17746 }
   }
 }
 

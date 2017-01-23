@@ -2,8 +2,10 @@ package ford.rnd
  
 interface ML {
   version {major 1 minor 0}
+
   method sayHello {
     in {
+      <** @description : your name **>
       String name
     }
     out {
@@ -15,8 +17,11 @@ interface ML {
     out {
       UInt64 currency
     }
-    error {
-      NOT_POLITE
+  }
+
+  broadcast getOut {
+    out {
+      String phrase
     }
   }
 } 

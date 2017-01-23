@@ -1,0 +1,14 @@
+find_package(vsomeip 2.5.2 REQUIRED)
+find_package(CommonAPI-SomeIP 3.1.10 REQUIRED)
+
+include_directories(
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${VSOMEIP_INCLUDE_DIRS}
+  ${COMMONAPI_SOMEIP_INCLUDE_DIRS}
+)
+
+set(FIDL_PATH ${CMAKE_SOURCE_DIR}/fidl)
+
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+
+include(ML)

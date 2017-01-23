@@ -2,14 +2,21 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -std=c++11")
 set(COMMONAPI_PATH /home/kolodiy/git/genivi)
 
-set(capi-core-gen ${COMMONAPI_PATH}/capicxx-core-tools/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-generator-linux-x86_64 --dest ${CMAKE_BINARY_DIR}/src-gen --skel fidl/ML.fidl)
+set(capi-core-gen ${COMMONAPI_PATH}/capicxx-core-tools/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-generator-linux-x86_64)
+
+macro(generate_core_interface NameInterface)
 
 add_custom_command(OUTPUT
-    ${CMAKE_BINARY_DIR}/src-gen/v1/ford/rnd/MLStubDefault.cpp
-    COMMAND ${capi-core-gen}
-    DEPENDS fidl/ML.fidl
+    ${CMAKE_BINARY_DIR}/src-gen/v1/ford/rnd/${NameInterface}StubDefault.cpp
+    COMMAND ${capi-core-gen} --dest ${CMAKE_BINARY_DIR}/src-gen --skel fidl/ML/${NameInterface}.fidl
+    DEPENDS fidl/ML/${NameInterface}.fidl
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    COMMENT "Generate core CommonAPI files")
+    COMMENT "Generate core CommonAPI files for fidl/${NameInterface}.fidl")
+
+endmacro(generate_core_interface)
+
+generate_core_interface(ML)
+generate_core_interface(SmartML)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/src-gen
@@ -32,31 +39,13 @@ add_executable(service
     src/service.cpp
     src/stub.cpp
     ${CMAKE_BINARY_DIR}/src-gen/v1/ford/rnd/MLStubDefault.cpp
+    ${CMAKE_BINARY_DIR}/src-gen/v1/ford/rnd/SmartMLStubDefault.cpp
 )
 target_link_libraries(service CommonAPI)
 
 add_dependencies(client service)
 
-set(capi-someip-gen ${COMMONAPI_PATH}/capicxx-someip-tools/org.genivi.commonapi.someip.cli.product/target/products/org.genivi.commonapi.someip.cli.product/linux/gtk/x86_64/commonapi-someip-generator-linux-x86_64 --dest ${CMAKE_BINARY_DIR}/src-gen fidl/ML.fdepl)
-
-add_custom_command(OUTPUT
-    ${CMAKE_BINARY_DIR}/src-gen/v1/ford/rnd/MLSomeIPStubAdapter.cpp
-    ${CMAKE_BINARY_DIR}/src-gen/v1/ford/rnd/MLSomeIPDeployment.cpp
-    ${CMAKE_BINARY_DIR}/src-gen/v1/ford/rnd/MLSomeIPProxy.cpp
-    COMMAND ${capi-someip-gen}
-    DEPENDS fidl/ML.fdepl
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    COMMENT "Generate SOME/IP CommonAPI files")
-
-
-add_library(ML SHARED
-    ${CMAKE_BINARY_DIR}/src-gen/v1/ford/rnd/MLSomeIPStubAdapter.cpp
-    ${CMAKE_BINARY_DIR}/src-gen/v1/ford/rnd/MLSomeIPDeployment.cpp
-    ${CMAKE_BINARY_DIR}/src-gen/v1/ford/rnd/MLSomeIPProxy.cpp
-)
-target_link_libraries(ML CommonAPI-SomeIP)
-
-install(TARGETS client service ML
+install(TARGETS client service
     RUNTIME DESTINATION ${CMAKE_BINARY_DIR}/bin
     LIBRARY DESTINATION ${CMAKE_BINARY_DIR}/lib
     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
@@ -89,3 +78,5 @@ install(FILES
     ${COMMONAPI_PATH}/vsomeip/build/daemon/vsomeipd
     DESTINATION ${CMAKE_BINARY_DIR}/bin
     PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
+
+add_subdirectory(libraries)
