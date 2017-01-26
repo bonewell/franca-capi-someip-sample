@@ -1,15 +1,17 @@
 set(COMMONAPI_PATH /home/kolodiy/git/genivi)
+set(capi-core-gen ${COMMONAPI_PATH}/capicxx-core-tools/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-generator-linux-x86_64)
 set(capi-someip-gen ${COMMONAPI_PATH}/capicxx-someip-tools/org.genivi.commonapi.someip.cli.product/target/products/org.genivi.commonapi.someip.cli.product/linux/gtk/x86_64/commonapi-someip-generator-linux-x86_64)
 set(FIDL_PATH ${CMAKE_SOURCE_DIR}/fidl)
 
 # Interface is formated string:
 # <name>[.<name>...]:<major_version>
 # For example: ford.rnd.VR:1
-macro(create_someip_library LibraryName Interface1 ...)
+macro(create_someip_library LibraryName Interface1...)
   set(INTERFACES ${ARGV})
   list(REMOVE_AT INTERFACES 0)
   message(STATUS "Configure ${LibraryName} library with ${INTERFACES} interfaces")
   # Generate list of names of files according with INTERFACES to add
+  set(FIDL_FILES)
   set(FDEPL_FILES)
   set(SOURCE_FILES)
   foreach(iface ${INTERFACES})
@@ -28,13 +30,17 @@ macro(create_someip_library LibraryName Interface1 ...)
 
     string(FIND ${INTERFACE_NAME} "." FDEPL_INDEX REVERSE)
     math(EXPR FILE_INDEX ${FDEPL_INDEX}+1)
-    string(SUBSTRING ${INTERFACE_NAME} ${FILE_INDEX} -1 FDEPL_NAME)
+    string(SUBSTRING ${INTERFACE_NAME} ${FILE_INDEX} -1 FILE_NAME)
+    list(APPEND FIDL_FILES
+      ${FIDL_PATH}/${FILE_NAME}.fidl
+    )
     list(APPEND FDEPL_FILES
-      ${FIDL_PATH}/${FDEPL_NAME}.fdepl
+      ${FIDL_PATH}/${FILE_NAME}.fdepl
     )
   endforeach(iface)
 
   add_custom_command(OUTPUT ${SOURCE_FILES}
+    COMMAND ${capi-core-gen} --printfiles --dest ${CMAKE_CURRENT_BINARY_DIR} ${FIDL_FILES}
     COMMAND ${capi-someip-gen} --printfiles --dest ${CMAKE_CURRENT_BINARY_DIR} ${FDEPL_FILES}
     DEPENDS ${FDEPL_FILES}
     COMMENT "Generate source files for ${LibraryName} library"
@@ -42,13 +48,21 @@ macro(create_someip_library LibraryName Interface1 ...)
 
   add_library(${LibraryName} SHARED ${SOURCE_FILES})
   target_link_libraries(${LibraryName} CommonAPI-SomeIP)
+
+  install(TARGETS ${LibraryName}
+    LIBRARY DESTINATION ${CMAKE_BINARY_DIR}/build/lib
+    PERMISSIONS OWNER_READ OWNER_WRITE
+  )
+
 endmacro(create_someip_library)
 
+find_package(CommonAPI 3.1.10 REQUIRED)
 find_package(vsomeip 2.5.2 REQUIRED)
 find_package(CommonAPI-SomeIP 3.1.10 REQUIRED)
 
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
+  ${COMMONAPI_INCLUDE_DIRS}
   ${VSOMEIP_INCLUDE_DIRS}
   ${COMMONAPI_SOMEIP_INCLUDE_DIRS}
 )
