@@ -2,7 +2,8 @@ project(MLService)
 
 set(SOURCE
   service.cpp
-  stub.cpp
+  mlservice.cpp
+  smartmlservice.cpp
 )
 
 create_core_library(${PROJECT_NAME} ford.rnd.ML:1 ford.rnd.SmartML:1)
