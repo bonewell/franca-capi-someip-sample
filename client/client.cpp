@@ -47,7 +47,12 @@ int main() {
     myProxy->getNameAttribute().getValue(callStatus, nameval);
     std::cout << "Name: " << nameval << std::endl;
 
+    myProxy->getNameAttribute().getChangedEvent().subscribe([](const std::string& value) {
+      std::cout << "Name is changed: " << value << std::endl;
+    });
+
     myProxy->getNameAttribute().setValue("Kate", callStatus, nameval);
+    std::cout << "Name: " << nameval << std::endl;
 
     std::string s_instance = "ford.rnd.SmartML";
     std::shared_ptr<SmartMLProxyDefault> mySProxy = runtime->buildProxy<SmartMLProxy>(
