@@ -40,30 +40,30 @@ macro(append_fdepl_file FileName)
   )
 endmacro(append_fdepl_file)
 
-macro(append_type_collection Path Version)
-  list(APPEND SOURCE_FILES
+macro(append_someip_type_collection Path Version)
+  list(APPEND SOURCE_SOMEIP_FILES
     ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}SomeIPDeployment.cpp
   )
-endmacro(append_type_collection)
+endmacro(append_someip_type_collection)
 
-macro(append_interface Path Version)
-  list(APPEND SOURCE_FILES
+macro(append_someip_interface Path Version)
+  list(APPEND SOURCE_SOMEIP_FILES
     ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}SomeIPStubAdapter.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}SomeIPDeployment.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}SomeIPProxy.cpp
   )
-endmacro(append_interface)
+endmacro(append_someip_interface)
 
 # Type is formated string:
 # <name>[.<name>...]:<major_version>
 # For example: ford.rnd.types.VR:1
 
 macro(add_someip_types Type...)
-  message(STATUS "Configure collections of types - [ ${ARGV} ]")
+  message(STATUS "Configure collections of types for SOME/IP - [ ${ARGV} ]")
   foreach(iface ${ARGV})
     get_interface_path(${iface} INTERFACE_PATH)
     get_interface_version(${iface} INTERFACE_VERSION)
-    append_type_collection(${INTERFACE_PATH} ${INTERFACE_VERSION})
+    append_someip_type_collection(${INTERFACE_PATH} ${INTERFACE_VERSION})
     get_interface_file(${iface} FILE_NAME)
     append_fidl_file(${FILE_NAME})
     append_fdepl_file(${FILE_NAME})
@@ -75,11 +75,11 @@ endmacro(add_someip_types)
 # For example: ford.rnd.VR:1
 
 macro(add_someip_interfaces Interface...)
-  message(STATUS "Configure interfaces - [ ${ARGV} ]")
+  message(STATUS "Configure interfaces for SOME/IP - [ ${ARGV} ]")
   foreach(iface ${ARGV})
     get_interface_path(${iface} INTERFACE_PATH)
     get_interface_version(${iface} INTERFACE_VERSION)
-    append_interface(${INTERFACE_PATH} ${INTERFACE_VERSION})
+    append_someip_interface(${INTERFACE_PATH} ${INTERFACE_VERSION})
     get_interface_file(${iface} FILE_NAME)
     append_fidl_file(${FILE_NAME})
     append_fdepl_file(${FILE_NAME})
@@ -87,19 +87,19 @@ macro(add_someip_interfaces Interface...)
 endmacro(add_someip_interfaces)
 
 macro(add_someip_library Target)
-  add_custom_command(OUTPUT ${SOURCE_FILES}
+  add_custom_command(OUTPUT ${SOURCE_SOMEIP_FILES}
     COMMAND ${capi-core-gen} --printfiles --dest ${CMAKE_CURRENT_BINARY_DIR} ${FIDL_FILES}
     COMMAND ${capi-someip-gen} --printfiles --dest ${CMAKE_CURRENT_BINARY_DIR} ${FDEPL_FILES}
     DEPENDS ${FIDL_FILES} ${FDEPL_FILES}
-    COMMENT "Generate source files for ${Target} library"
+    COMMENT "Generate source files for ${Target} (SOME/IP) library"
   )
-  add_library(${Target} SHARED ${SOURCE_FILES})
+  add_library(${Target} SHARED ${SOURCE_SOMEIP_FILES})
   target_link_libraries(${Target} CommonAPI-SomeIP)
   install(TARGETS ${Target}
     LIBRARY DESTINATION ${CMAKE_BINARY_DIR}/build/lib
     PERMISSIONS OWNER_READ OWNER_WRITE
   )
-  message(STATUS "Configure ${Target} library")
+  message(STATUS "Configure ${Target} (SOME/IP) library")
 endmacro(add_someip_library)
 
 find_package(CommonAPI 3.1.10 REQUIRED)
