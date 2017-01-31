@@ -3,6 +3,8 @@ package ford.rnd
 interface ML {
   version {major 1 minor 0}
 
+  attribute String name
+
   method sayHello {
     in {
       <** @description : your name **>

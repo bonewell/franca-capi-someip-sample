@@ -3,7 +3,7 @@
 #include <string>
 #include <unistd.h>
 #include "CommonAPI/CommonAPI.hpp"
-//#include "v1/ford/rnd/MLProxy.hpp"
+#include "v1/ford/rnd/MLProxy.hpp"
 #include "v1/ford/rnd/SmartMLProxy.hpp"
 
 using namespace v1_0::ford::rnd;
@@ -12,36 +12,46 @@ int main() {
     std::string domain = "local";
     std::string instance = "ford.rnd.ML";
     std::shared_ptr<CommonAPI::Runtime> runtime = CommonAPI::Runtime::get();
-//    std::shared_ptr<MLProxyDefault> myProxy = runtime->buildProxy<MLProxy>(domain,
-//                                                                           instance);
-//
-//    if (!myProxy) {
-//        std::cout << "Could not build proxy\n";
-//        return 1;
-//    }
-//
-//    std::cout << "Checking availability!\n";
-//    while (!myProxy->isAvailable()) {
-//        usleep(10);
-//    }
-//    std::cout << "Available...\n";
-//
+    std::shared_ptr<MLProxyDefault> myProxy = runtime->buildProxy<MLProxy>(domain,
+                                                                           instance);
+
+    if (!myProxy) {
+        std::cout << "Could not build proxy\n";
+        return 1;
+    }
+
+    std::cout << "Checking availability!\n";
+    while (!myProxy->isAvailable()) {
+        usleep(10);
+    }
+    std::cout << "Available...\n";
+
     CommonAPI::CallStatus callStatus;
     std::string returnMessage;
-//    myProxy->sayHello("Bob", callStatus, returnMessage);
-//    std::cout << "Got message: " << returnMessage << std::endl;
-//
-//    myProxy->getGetOutEvent().subscribe([](const std::string& value) {
-//      std::cout << "GetOut! " << value << std::endl;
-//    });
-//
+    myProxy->sayHello("Bob", callStatus, returnMessage);
+    std::cout << "Got message: " << returnMessage << std::endl;
+
+    myProxy->getNameAttribute().getChangedEvent().subscribe([](const std::string& value) {
+      std::cout << "Name is changed: " << value << std::endl;
+    });
+
+    myProxy->getGetOutEvent().subscribe([](const std::string& value) {
+      std::cout << "GetOut! " << value << std::endl;
+    });
+
     uint64_t count = 0;
-//    myProxy->howMuch(callStatus, count);
-//    std::cout << "Cost: " << count << std::endl;
+    myProxy->howMuch(callStatus, count);
+    std::cout << "Cost: " << count << std::endl;
+
+    std::string nameval;
+    myProxy->getNameAttribute().getValue(callStatus, nameval);
+    std::cout << "Name: " << nameval << std::endl;
+
+    myProxy->getNameAttribute().setValue("Kate", callStatus, nameval);
 
     std::string s_instance = "ford.rnd.SmartML";
     std::shared_ptr<SmartMLProxyDefault> mySProxy = runtime->buildProxy<SmartMLProxy>(
-        domain,s_instance);
+        domain, s_instance);
 
     if (!mySProxy) {
       std::cout << "Could not build smart proxy\n";
