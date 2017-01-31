@@ -1,0 +1,6 @@
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP_deployment_spec.fdepl"
+
+import "MLTypes.fidl"
+
+define org.genivi.commonapi.someip.deployment for typeCollection ford.rnd.MLTypes {
+}

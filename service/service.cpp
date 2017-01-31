@@ -13,6 +13,8 @@ int main() {
     bool ret_ml = runtime->registerService(domain, instance, myService);
     if (ret_ml) {
       std::cout << "Successfully Registered Service!" << std::endl;
+    } else {
+      std::cerr << "Service is not registered!" << std::endl;
     }
 
     std::string s_instance = "ford.rnd.SmartML";
@@ -20,6 +22,8 @@ int main() {
     bool ret_sml = runtime->registerService(domain, s_instance, mySService);
     if (ret_sml) {
       std::cout << "Successfully Registered Smart Service!" << std::endl;
+    } else {
+      std::cerr << "Smart Service is not registered!" << std::endl;
     }
 
     while (true) {

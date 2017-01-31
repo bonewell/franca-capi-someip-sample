@@ -26,11 +26,6 @@ int main() {
     }
     std::cout << "Available...\n";
 
-    CommonAPI::CallStatus callStatus;
-    std::string returnMessage;
-    myProxy->sayHello("Bob", callStatus, returnMessage);
-    std::cout << "Got message: " << returnMessage << std::endl;
-
     myProxy->getNameAttribute().getChangedEvent().subscribe([](const std::string& value) {
       std::cout << "Name is changed: " << value << std::endl;
     });
@@ -39,6 +34,11 @@ int main() {
       std::cout << "GetOut! " << value << std::endl;
     });
 
+    CommonAPI::CallStatus callStatus;
+    std::string returnMessage;
+    myProxy->sayHello("Bob", callStatus, returnMessage);
+    std::cout << "Got message: " << returnMessage << std::endl;
+
     uint64_t count = 0;
     myProxy->howMuch(callStatus, count);
     std::cout << "Cost: " << count << std::endl;
@@ -46,10 +46,6 @@ int main() {
     std::string nameval;
     myProxy->getNameAttribute().getValue(callStatus, nameval);
     std::cout << "Name: " << nameval << std::endl;
-
-    myProxy->getNameAttribute().getChangedEvent().subscribe([](const std::string& value) {
-      std::cout << "Name is changed: " << value << std::endl;
-    });
 
     myProxy->getNameAttribute().setValue("Kate", callStatus, nameval);
     std::cout << "Name: " << nameval << std::endl;

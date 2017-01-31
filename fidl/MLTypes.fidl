@@ -1,0 +1,5 @@
+package ford.rnd
+
+typeCollection MLTypes {
+    version { major 1 minor 0 }
+}
