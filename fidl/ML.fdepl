@@ -5,6 +5,16 @@ import "ML.fidl"
 define org.genivi.commonapi.someip.deployment for interface ford.rnd.ML {
   SomeIpServiceID = 4660
 
+  attribute name {
+    SomeIpGetterID = 30000
+    SomeIpGetterReliable = true
+    SomeIpSetterID = 30001
+    SomeIpSetterReliable = true
+    SomeIpNotifierID = 30002
+    SomeIpNotifierReliable = true
+    SomeIpEventGroups = { 17746 }
+  }
+
   method sayHello {
     SomeIpMethodID = 32000
     SomeIpReliable = true

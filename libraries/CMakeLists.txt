@@ -42,7 +42,7 @@ macro(create_someip_library LibraryName Interface1...)
   add_custom_command(OUTPUT ${SOURCE_FILES}
     COMMAND ${capi-core-gen} --printfiles --dest ${CMAKE_CURRENT_BINARY_DIR} ${FIDL_FILES}
     COMMAND ${capi-someip-gen} --printfiles --dest ${CMAKE_CURRENT_BINARY_DIR} ${FDEPL_FILES}
-    DEPENDS ${FDEPL_FILES}
+    DEPENDS ${FIDL_FILES} ${FDEPL_FILES}
     COMMENT "Generate source files for ${LibraryName} library"
   )
 
