@@ -8,4 +8,9 @@ typeCollection MLTypes {
     BT
     USB
   }
+
+  struct Person {
+      String name
+      Int32 id
+  }
 }

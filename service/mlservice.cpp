@@ -56,3 +56,10 @@ void MLService::getConnectionType(
     _reply(MLTypes::ConnectionType());
   }
 }
+
+void MLService::getLastPerson(
+    const std::shared_ptr<CommonAPI::ClientId> _client,
+    getLastPersonReply_t _reply) {
+  std::cout << "getLastPerson()\n";
+ _reply(MLTypes::Person("Tereza", 3));
+}

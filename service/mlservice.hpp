@@ -17,6 +17,8 @@ class MLService : public v1::ford::rnd::MLStubDefault {
   virtual void getConnectionType(
       const std::shared_ptr<CommonAPI::ClientId> _client,
       getConnectionTypeReply_t _reply);
+  virtual void getLastPerson(const std::shared_ptr<CommonAPI::ClientId> _client,
+                             getLastPersonReply_t _reply);
 
  private:
   typedef std::map<std::size_t, std::string> ClientList;

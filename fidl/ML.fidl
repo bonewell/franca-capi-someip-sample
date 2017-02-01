@@ -41,9 +41,15 @@ interface ML {
       }
   }
 
+  method getLastPerson {
+      out {
+          MLTypes.Person person
+      }
+  }
+
   broadcast getOut {
     out {
       String phrase
     }
   }
-} 
+}
