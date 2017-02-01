@@ -56,6 +56,12 @@ interface ML {
       }
   }
 
+  method getCountries {
+      out {
+          MLTypes.Countries countries
+      }
+  }
+
   broadcast getOut {
     out {
       String phrase

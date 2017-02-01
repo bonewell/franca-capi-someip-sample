@@ -45,6 +45,11 @@ define org.genivi.commonapi.someip.deployment for interface ford.rnd.ML {
     SomeIpReliable = true
   }
 
+  method getCountries {
+    SomeIpMethodID = 32006
+    SomeIpReliable = true
+  }
+
   broadcast getOut {
     SomeIpEventID = 34000
     SomeIpReliable = true

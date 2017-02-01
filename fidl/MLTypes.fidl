@@ -10,9 +10,13 @@ typeCollection MLTypes {
   }
 
   struct Person {
-      String name
-      Int32 id
+    String name
+    Int32 id
   }
 
   array Staff of Person
+
+  map Countries {
+    Int32 to String
+  }
 }

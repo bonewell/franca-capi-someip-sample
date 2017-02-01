@@ -25,6 +25,13 @@ std::ostream& operator<<(std::ostream& out, const MLTypes::Staff& staff) {
   return out;
 }
 
+std::ostream& operator<<(std::ostream& out, const MLTypes::Countries& countries) {
+  for (auto country : countries) {
+    out << "Country(" << country.first << ", " << country.second << ")\n";
+  }
+  return out;
+}
+
 int main() {
   std::string domain = "local";
   std::string instance = "ford.rnd.ML";
@@ -83,6 +90,10 @@ int main() {
   MLTypes::Staff staff;
   myProxy->getStaff("Taxoft", callStatus, staff);
   std::cout << "Staff: " << staff << std::endl;
+
+  MLTypes::Countries countries;
+  myProxy->getCountries(callStatus, countries);
+  std::cout << "Countries: " << countries << std::endl;
 
   std::string s_instance = "ford.rnd.SmartML";
   std::shared_ptr<SmartMLProxyDefault> mySProxy = runtime->buildProxy
