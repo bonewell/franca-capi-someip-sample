@@ -61,5 +61,19 @@ void MLService::getLastPerson(
     const std::shared_ptr<CommonAPI::ClientId> _client,
     getLastPersonReply_t _reply) {
   std::cout << "getLastPerson()\n";
- _reply(MLTypes::Person("Tereza", 3));
+  _reply(MLTypes::Person("Tereza", 3));
+}
+
+void MLService::getStaff(const std::shared_ptr<CommonAPI::ClientId> _client,
+                         std::string _name, getStaffReply_t _reply) {
+  std::cout << "getStaff()\n";
+  if (_name == "Taxoft") {
+    MLTypes::Staff staff;
+    staff.push_back(MLTypes::Person("Kaly", 1));
+    staff.push_back(MLTypes::Person("Alisa", 2));
+    _reply(staff);
+  } else {
+    MLTypes::Staff staff;
+    _reply(staff);
+  }
 }

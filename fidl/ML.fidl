@@ -47,6 +47,15 @@ interface ML {
       }
   }
 
+  method getStaff {
+      in {
+          String name
+      }
+      out {
+          MLTypes.Staff staff
+      }
+  }
+
   broadcast getOut {
     out {
       String phrase

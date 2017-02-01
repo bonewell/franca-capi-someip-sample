@@ -13,4 +13,6 @@ typeCollection MLTypes {
       String name
       Int32 id
   }
+
+  array Staff of Person
 }
