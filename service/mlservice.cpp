@@ -1,6 +1,7 @@
 #include "mlservice.hpp"
 
 using ::v1::ford::rnd::ML;
+using ::v1::ford::rnd::MLTypes;
 
 MLService::MLService() {
 }
@@ -41,5 +42,17 @@ void MLService::getDeviceType(
     _reply(ML::DeviceType(ML::DeviceType::LAPTOP));
   } else {
     _reply(ML::DeviceType());
+  }
+}
+
+void MLService::getConnectionType(
+    const std::shared_ptr<CommonAPI::ClientId> _client,
+    getConnectionTypeReply_t _reply) {
+  std::cout << "getConnectionType()\n";
+  ClientList::iterator i = clients_.find(_client->hashCode());
+  if (i != clients_.end() && i->second == "Kate") {
+    _reply(MLTypes::ConnectionType(MLTypes::ConnectionType::USB));
+  } else {
+    _reply(MLTypes::ConnectionType());
   }
 }

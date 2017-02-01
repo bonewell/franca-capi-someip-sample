@@ -1,5 +1,7 @@
 package ford.rnd
- 
+
+import ford.rnd.* from "MLTypes.fidl"
+
 interface ML {
   version {major 1 minor 0}
 
@@ -31,6 +33,12 @@ interface ML {
     out {
       DeviceType deviceType
     }
+  }
+
+  method getConnectionType {
+      out {
+          MLTypes.ConnectionType connType
+      }
   }
 
   broadcast getOut {
