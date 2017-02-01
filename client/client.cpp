@@ -50,6 +50,10 @@ int main() {
     myProxy->getNameAttribute().setValue("Kate", callStatus, nameval);
     std::cout << "Name: " << nameval << std::endl;
 
+    ML::DeviceType deviceType;
+    myProxy->getDeviceType(callStatus, deviceType);
+    std::cout << "Device type: " << deviceType << std::endl;
+
     std::string s_instance = "ford.rnd.SmartML";
     std::shared_ptr<SmartMLProxyDefault> mySProxy = runtime->buildProxy<SmartMLProxy>(
         domain, s_instance);

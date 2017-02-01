@@ -12,6 +12,12 @@ class MLService : public v1::ford::rnd::MLStubDefault {
                         std::string _name, sayHelloReply_t _reply);
   virtual void howMuch(const std::shared_ptr<CommonAPI::ClientId> _client,
                        howMuchReply_t _reply);
+  virtual void getDeviceType(const std::shared_ptr<CommonAPI::ClientId> _client,
+                             getDeviceTypeReply_t _reply);
+
+ private:
+  typedef std::map<std::size_t, std::string> ClientList;
+  ClientList clients_;
 };
 
 #endif /* MLSERVICE_H_ */

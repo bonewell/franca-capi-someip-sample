@@ -3,6 +3,12 @@ package ford.rnd
 interface ML {
   version {major 1 minor 0}
 
+  enumeration DeviceType {
+      PHONE
+      TABLET
+      LAPTOP
+  }
+
   attribute String name
 
   method sayHello {
@@ -18,6 +24,12 @@ interface ML {
   method howMuch {
     out {
       UInt64 currency
+    }
+  }
+
+  method getDeviceType {
+    out {
+      DeviceType deviceType
     }
   }
 
