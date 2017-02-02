@@ -80,7 +80,7 @@ void MLService::getStaff(const std::shared_ptr<CommonAPI::ClientId> _client,
 
 void MLService::getCountries(const std::shared_ptr<CommonAPI::ClientId> _client,
                              getCountriesReply_t _reply) {
-  std::cout << "getStaff()\n";
+  std::cout << "getCountries()\n";
   MLTypes::Countries countries;
   countries[1] = "Russia";
   countries[2] = "Bulgaria";

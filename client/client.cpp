@@ -27,7 +27,7 @@ std::ostream& operator<<(std::ostream& out, const MLTypes::Staff& staff) {
 
 std::ostream& operator<<(std::ostream& out, const MLTypes::Countries& countries) {
   for (auto country : countries) {
-    out << "Country(" << country.first << ", " << country.second << ")\n";
+    out << country.first << " -> " << country.second << std::endl;
   }
   return out;
 }
