@@ -28,14 +28,16 @@ function(get_interface_version IName IVersion)
   set(${IVersion} ${INTERFACE_VERSION} PARENT_SCOPE)
 endfunction(get_interface_version)
 
-macro(append_fidl_file FileName)
-  list(APPEND FIDL_FILES
+macro(append_fidl_file Target FileName)
+  set(FIDL_LINK ${Target}_FIDL_FILES)
+  list(APPEND ${FIDL_LINK}
     ${FIDL_PATH}/${FileName}.fidl
   )
 endmacro(append_fidl_file)
 
-macro(append_capi_interface Path Version)
-  list(APPEND SOURCE_CAPI_FILES
+macro(append_capi_interface Target Path Version)
+  set(SOURCE_LINK ${Target}_SOURCE_CAPI_FILES)
+  list(APPEND ${SOURCE_LINK}
     ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}StubDefault.cpp
   )
 endmacro(append_capi_interface)
@@ -44,13 +46,15 @@ endmacro(append_capi_interface)
 # <name>[.<name>...]:<major_version>
 # For example: ford.rnd.types.VR:1
 
-macro(add_capi_types Type...)
-  message(STATUS "Configure collections of types for CommonAPI - [ ${ARGV} ]")
-  foreach(iface ${ARGV})
+macro(add_capi_types Target Type...)
+  set(Types ${ARGV})
+  list(REMOVE_AT Types 0)
+  message(STATUS "Configure collections of types for CommonAPI - [ ${Types} ]")
+  foreach(iface ${Types})
     get_interface_path(${iface} INTERFACE_PATH)
     get_interface_version(${iface} INTERFACE_VERSION)
     get_interface_file(${iface} FILE_NAME)
-    append_fidl_file(${FILE_NAME})
+    append_fidl_file(${Target} ${FILE_NAME})
   endforeach(iface)
 endmacro(add_capi_types)
 
@@ -58,14 +62,16 @@ endmacro(add_capi_types)
 # <name>[.<name>...]:<major_version>
 # For example: ford.rnd.VR:1
 
-macro(add_capi_interfaces Interface...)
-  message(STATUS "Configure interfaces for CommonAPI - [ ${ARGV} ]")
-  foreach(iface ${ARGV})
+macro(add_capi_interfaces Target Interface...)
+  set(Interfaces ${ARGV})
+  list(REMOVE_AT Interfaces 0)
+  message(STATUS "Configure interfaces for CommonAPI - [ ${Interfaces} ]")
+  foreach(iface ${Interfaces})
     get_interface_path(${iface} INTERFACE_PATH)
     get_interface_version(${iface} INTERFACE_VERSION)
-    append_capi_interface(${INTERFACE_PATH} ${INTERFACE_VERSION})
+    append_capi_interface(${Target} ${INTERFACE_PATH} ${INTERFACE_VERSION})
     get_interface_file(${iface} FILE_NAME)
-    append_fidl_file(${FILE_NAME})
+    append_fidl_file(${Target} ${FILE_NAME})
   endforeach(iface)
 endmacro(add_capi_interfaces)
 
@@ -75,12 +81,15 @@ macro(add_capi_library Target)
     ${CMAKE_CURRENT_BINARY_DIR}
     ${COMMONAPI_INCLUDE_DIRS}
   )
-  add_custom_command(OUTPUT ${SOURCE_CAPI_FILES}
-    COMMAND ${capi-core-gen} --printfiles --skel --dest ${CMAKE_CURRENT_BINARY_DIR} ${FIDL_FILES}
-    DEPENDS ${FIDL_FILES}
+  set(SOURCE_LINK ${Target}_SOURCE_CAPI_FILES)
+  set(FIDL_LINK ${Target}_FIDL_FILES)
+  add_custom_command(OUTPUT ${${SOURCE_LINK}}
+    COMMAND ${capi-core-gen} --printfiles --skel
+        --dest ${CMAKE_CURRENT_BINARY_DIR} ${${FIDL_LINK}}
+    DEPENDS ${${FIDL_LINK}}
     COMMENT "Generate source files for ${Target} (CommonAPI) library"
   )
-  add_library(${Target} ${SOURCE_CAPI_FILES})
+  add_library(${Target} ${${SOURCE_LINK}})
   message(STATUS "Configure ${Target} (CommonAPI) library")
 endmacro(add_capi_library)
 

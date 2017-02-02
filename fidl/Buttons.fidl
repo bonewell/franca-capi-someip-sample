@@ -1,0 +1,73 @@
+package com.ford.hmi
+
+interface Buttons {
+    version { major 1 minor 0 }
+
+    enumeration ButtonName {
+        OK
+        SEEKLEFT
+        SEEKRIGHT
+        TUNEUP
+        TUNEDOWN
+        PRESET_0
+        PRESET_1
+        PRESET_2
+        PRESET_3
+        PRESET_4
+        PRESET_5
+        PRESET_6
+        PRESET_7
+        PRESET_8
+        PRESET_9
+        CUSTOM_BUTTON
+        SEARCH
+    }
+
+    struct ButtonCapabilities {
+        ButtonName name
+        Boolean shortPressAvailable
+        Boolean longPressAvailable
+        Boolean upDownAvailable
+    }
+
+    array Capabilities of ButtonCapabilities
+
+    struct PresetBankCapabilities {
+        Boolean onScreenPresetsAvailable
+    }
+
+    enumeration ButtonEventMode {
+        BUTTONUP
+        BUTTONDOWN
+    }
+
+    enumeration ButtonPressMode {
+        LONG
+        SHORT
+    }
+
+    method GetCapabilities {
+        out {
+            Capabilities capabilities
+            PresetBankCapabilities presetBankCapabilities
+        }
+    }
+
+    broadcast OnButtonEvent {
+        out {
+            ButtonName name
+            ButtonEventMode mode
+            Integer(0, 65536) customButtonID
+            Int32 appID
+        }
+    }
+
+    broadcast onButtonPress {
+        out {
+            ButtonName name
+            ButtonPressMode mode
+            Integer(0, 65536) customButtonID
+            Int32 appID
+        }
+    }
+}

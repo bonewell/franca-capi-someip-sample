@@ -6,12 +6,15 @@ set(SOURCE
   smartmlservice.cpp
 )
 
-add_capi_types(ford.rnd.MLTypes:1)
-add_capi_interfaces(ford.rnd.ML:1 ford.rnd.SmartML:1)
+add_capi_types(MLStub ford.rnd.MLTypes:1)
+add_capi_interfaces(MLStub ford.rnd.ML:1 ford.rnd.SmartML:1)
 add_capi_library(MLStub)
 
+add_capi_interfaces(ButtonsStub com.ford.hmi.Buttons:1)
+add_capi_library(ButtonsStub)
+
 add_executable(${PROJECT_NAME} ${SOURCE})
-target_link_libraries(${PROJECT_NAME} MLStub CommonAPI)
+target_link_libraries(${PROJECT_NAME} CommonAPI MLStub ButtonsStub)
 
 install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION ${CMAKE_BINARY_DIR}/build/bin
