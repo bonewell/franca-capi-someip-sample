@@ -1,0 +1,37 @@
+import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP_deployment_spec.fdepl"
+
+import "Buttons.fidl"
+
+define org.genivi.commonapi.someip.deployment for interface com.ford.rnd.Buttons {
+  SomeIpServiceID = 4660
+
+  method GetCapabilities {
+    SomeIpMethodID = 32008
+    SomeIpReliable = true
+  }
+
+  broadcast OnButtonEvent {
+    SomeIpEventID = 34001
+    SomeIpReliable = true
+    SomeIpEventGroups = { 17746 }
+  }
+
+  broadcast onButtonPress {
+    SomeIpEventID = 34002
+    SomeIpReliable = true
+    SomeIpEventGroups = { 17746 }
+  }
+  
+  array Capabilities {
+    SomeIpArrayLengthWidth = 0
+    SomeIpArrayMinLength = 1
+    SomeIpArrayMaxLength = 100
+  }
+}
+
+define org.genivi.commonapi.someip.deployment for provider FordRndService {
+  instance com.ford.rnd.Buttons {
+    InstanceId = "com.ford.rnd"
+    SomeIpInstanceID = 22136
+  }
+}

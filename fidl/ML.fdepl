@@ -2,7 +2,7 @@ import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP
 
 import "ML.fidl"
 
-define org.genivi.commonapi.someip.deployment for interface ford.rnd.ML {
+define org.genivi.commonapi.someip.deployment for interface com.ford.rnd.ML {
   SomeIpServiceID = 4660
 
   attribute name {
@@ -58,8 +58,8 @@ define org.genivi.commonapi.someip.deployment for interface ford.rnd.ML {
 }
 
 define org.genivi.commonapi.someip.deployment for provider FordRndService {
-  instance ford.rnd.ML {
-    InstanceId = "ford.rnd.ML"
+  instance com.ford.rnd.ML {
+    InstanceId = "com.ford.rnd"
     SomeIpInstanceID = 22136
   }
 }

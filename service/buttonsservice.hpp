@@ -30,18 +30,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SMARTMLService
-#define SMARTMLService
+#ifndef SERVICE_BUTTONSSERVICE_HPP_
+#define SERVICE_BUTTONSSERVICE_HPP_
 
 #include "CommonAPI/CommonAPI.hpp"
-#include "v1/com/ford/rnd/SmartMLStubDefault.hpp"
+#include "v1/com/ford/rnd/ButtonsStubDefault.hpp"
 
-class SmartMLService : public ::v1::com::ford::rnd::SmartMLStubDefault {
+class ButtonsService : public ::v1::com::ford::rnd::ButtonsStubDefault {
  public:
-  SmartMLService();
-  virtual ~SmartMLService();
-  virtual void ping(const std::shared_ptr<CommonAPI::ClientId> _client,
-                    int16_t _currency);
+  ButtonsService();
+  virtual ~ButtonsService();
+  virtual void GetCapabilities(
+      const std::shared_ptr<CommonAPI::ClientId> _client,
+      GetCapabilitiesReply_t _reply);
 };
 
-#endif  // SMARTMLService
+#endif  // SERVICE_BUTTONSSERVICE_HPP_

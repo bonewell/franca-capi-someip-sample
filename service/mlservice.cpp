@@ -1,7 +1,7 @@
 #include "mlservice.hpp"
 
-using ::v1::ford::rnd::ML;
-using ::v1::ford::rnd::MLTypes;
+using ::v1::com::ford::rnd::ML;
+using ::v1::com::ford::rnd::MLTypes;
 
 MLService::MLService() {
 }

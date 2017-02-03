@@ -1,4 +1,4 @@
-package ford.rnd
+package com.ford.rnd
 
 typeCollection MLTypes {
   version { major 1 minor 0 }

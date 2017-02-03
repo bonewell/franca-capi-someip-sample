@@ -2,8 +2,8 @@ project(MLClient)
 
 set(SOURCE client.cpp)
 
-add_capi_types(MLProxy ford.rnd.MLTypes:1)
-add_capi_interfaces(MLProxy ford.rnd.ML:1 ford.rnd.SmartML:1)
+add_capi_types(MLProxy com.ford.rnd.MLTypes:1)
+add_capi_interfaces(MLProxy com.ford.rnd.ML:1 com.ford.rnd.SmartML:1)
 add_capi_library(MLProxy)
 
 add_executable(${PROJECT_NAME} ${SOURCE})

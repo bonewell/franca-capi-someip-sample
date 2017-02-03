@@ -2,11 +2,11 @@ import "platform:/plugin/org.genivi.commonapi.someip/deployment/CommonAPI-SOMEIP
 import "ML.fdepl"
 import "SmartML.fidl"
 
-define org.genivi.commonapi.someip.deployment for interface ford.rnd.SmartML {
+define org.genivi.commonapi.someip.deployment for interface com.ford.rnd.SmartML {
   SomeIpServiceID = 4660
 
   method ping {
-    SomeIpMethodID = 32002
+    SomeIpMethodID = 32007
     SomeIpReliable = true
   }
 

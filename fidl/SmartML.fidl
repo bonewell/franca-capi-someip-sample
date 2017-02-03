@@ -1,6 +1,6 @@
-package ford.rnd
+package com.ford.rnd
 
-import ford.rnd.* from "ML.fidl"
+import com.ford.rnd.* from "ML.fidl"
 
 interface SmartML extends ML {
   version { major 1 minor 0 }

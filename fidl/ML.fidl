@@ -1,6 +1,6 @@
-package ford.rnd
+package com.ford.rnd
 
-import ford.rnd.* from "MLTypes.fidl"
+import com.ford.rnd.* from "MLTypes.fidl"
 
 interface ML {
   version {major 1 minor 0}

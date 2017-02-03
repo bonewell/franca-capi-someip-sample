@@ -2,9 +2,9 @@
 #define MLSERVICE_H_
 
 #include "CommonAPI/CommonAPI.hpp"
-#include "v1/ford/rnd/MLStubDefault.hpp"
+#include "v1/com/ford/rnd/MLStubDefault.hpp"
 
-class MLService : public v1::ford::rnd::MLStubDefault {
+class MLService : public ::v1::com::ford::rnd::MLStubDefault {
  public:
   MLService();
   virtual ~MLService();

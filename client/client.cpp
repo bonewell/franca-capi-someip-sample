@@ -3,16 +3,16 @@
 #include <string>
 #include <unistd.h>
 #include "CommonAPI/CommonAPI.hpp"
-#include "v1/ford/rnd/MLTypes.hpp"
-#include "v1/ford/rnd/MLProxy.hpp"
-#include "v1/ford/rnd/SmartMLProxy.hpp"
+#include "v1/com/ford/rnd/MLTypes.hpp"
+#include "v1/com/ford/rnd/MLProxy.hpp"
+#include "v1/com/ford/rnd/SmartMLProxy.hpp"
 
-using v1::ford::rnd::MLProxy;
-using v1::ford::rnd::MLProxyDefault;
-using v1::ford::rnd::SmartMLProxy;
-using v1::ford::rnd::SmartMLProxyDefault;
-using v1::ford::rnd::ML;
-using v1::ford::rnd::MLTypes;
+using ::v1::com::ford::rnd::MLProxy;
+using ::v1::com::ford::rnd::MLProxyDefault;
+using ::v1::com::ford::rnd::SmartMLProxy;
+using ::v1::com::ford::rnd::SmartMLProxyDefault;
+using ::v1::com::ford::rnd::ML;
+using ::v1::com::ford::rnd::MLTypes;
 
 std::ostream& operator<<(std::ostream& out, const MLTypes::Person& person) {
   return out << "Person(" << person.getId() << ", " << person.getName() << ")\n";

@@ -4,13 +4,14 @@ set(SOURCE
   service.cpp
   mlservice.cpp
   smartmlservice.cpp
+  buttonsservice.cpp
 )
 
-add_capi_types(MLStub ford.rnd.MLTypes:1)
-add_capi_interfaces(MLStub ford.rnd.ML:1 ford.rnd.SmartML:1)
+add_capi_types(MLStub com.ford.rnd.MLTypes:1)
+add_capi_interfaces(MLStub com.ford.rnd.ML:1 com.ford.rnd.SmartML:1)
 add_capi_library(MLStub)
 
-add_capi_interfaces(ButtonsStub com.ford.hmi.Buttons:1)
+add_capi_interfaces(ButtonsStub com.ford.rnd.Buttons:1)
 add_capi_library(ButtonsStub)
 
 add_executable(${PROJECT_NAME} ${SOURCE})

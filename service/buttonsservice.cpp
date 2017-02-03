@@ -30,18 +30,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SMARTMLService
-#define SMARTMLService
+#include "buttonsservice.hpp"
 
-#include "CommonAPI/CommonAPI.hpp"
-#include "v1/com/ford/rnd/SmartMLStubDefault.hpp"
+using ::v1::com::ford::rnd::Buttons;
 
-class SmartMLService : public ::v1::com::ford::rnd::SmartMLStubDefault {
- public:
-  SmartMLService();
-  virtual ~SmartMLService();
-  virtual void ping(const std::shared_ptr<CommonAPI::ClientId> _client,
-                    int16_t _currency);
-};
+ButtonsService::ButtonsService() {
+  // TODO Auto-generated constructor stub
+}
 
-#endif  // SMARTMLService
+ButtonsService::~ButtonsService() {
+  // TODO Auto-generated destructor stub
+}
+
+void ButtonsService::GetCapabilities(
+    const std::shared_ptr<CommonAPI::ClientId> _client,
+    GetCapabilitiesReply_t _reply) {
+  std::cout << "GetCapabilities()\n";
+
+  Buttons::Capabilities capabilities;
+  capabilities.push_back(
+      Buttons::ButtonCapabilities(Buttons::ButtonName::TUNEUP, true, true,
+                                  true));
+  Buttons::PresetBankCapabilities presets(true);
+  _reply(capabilities, presets);
+}

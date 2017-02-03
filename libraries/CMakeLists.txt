@@ -5,29 +5,6 @@ set(capi-core-gen ${COMMONAPI_PATH}/capicxx-core-tools/org.genivi.commonapi.core
 set(capi-someip-gen ${COMMONAPI_PATH}/capicxx-someip-tools/org.genivi.commonapi.someip.cli.product/target/products/org.genivi.commonapi.someip.cli.product/linux/gtk/x86_64/commonapi-someip-generator-linux-x86_64)
 set(FIDL_PATH ${CMAKE_SOURCE_DIR}/fidl)
 
-function(get_interface_path IName IPath)
-  string(FIND ${IName} ":" DELIMITER_INDEX)
-  string(SUBSTRING ${IName} 0 ${DELIMITER_INDEX} INTERFACE_NAME)
-  string(REPLACE "." "/" INTERFACE_PATH ${INTERFACE_NAME})
-  set(${IPath} ${INTERFACE_PATH} PARENT_SCOPE)
-endfunction(get_interface_path)
-
-function(get_interface_file IName IFile)
-  string(FIND ${IName} ":" DELIMITER_INDEX)
-  string(SUBSTRING ${IName} 0 ${DELIMITER_INDEX} INTERFACE_NAME)
-  string(FIND ${INTERFACE_NAME} "." FDEPL_INDEX REVERSE)
-  math(EXPR FILE_INDEX ${FDEPL_INDEX}+1)
-  string(SUBSTRING ${INTERFACE_NAME} ${FILE_INDEX} -1 FILE_NAME)
-  set(${IFile} ${FILE_NAME} PARENT_SCOPE)
-endfunction(get_interface_file)
-
-function(get_interface_version IName IVersion)
-  string(FIND ${IName} ":" DELIMITER_INDEX)
-  math(EXPR VERSION_INDEX ${DELIMITER_INDEX}+1)
-  string(SUBSTRING ${IName} ${VERSION_INDEX} -1 INTERFACE_VERSION)
-  set(${IVersion} ${INTERFACE_VERSION} PARENT_SCOPE)
-endfunction(get_interface_version)
-
 macro(append_fidl_file Target FileName)
   set(FIDL_LINK ${Target}_FIDL_FILES)
   list(APPEND ${FIDL_LINK}
