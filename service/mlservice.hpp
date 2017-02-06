@@ -4,7 +4,7 @@
 #include "CommonAPI/CommonAPI.hpp"
 #include "v1/com/ford/rnd/MLStubDefault.hpp"
 
-class MLService : public ::v1::com::ford::rnd::MLStubDefault {
+class MLService : public virtual ::v1::com::ford::rnd::MLStubDefault {
  public:
   MLService();
   virtual ~MLService();

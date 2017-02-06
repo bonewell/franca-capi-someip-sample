@@ -34,9 +34,11 @@
 #define SMARTMLService
 
 #include "CommonAPI/CommonAPI.hpp"
+#include "mlservice.hpp"
 #include "v1/com/ford/rnd/SmartMLStubDefault.hpp"
 
-class SmartMLService : public ::v1::com::ford::rnd::SmartMLStubDefault {
+class SmartMLService : public MLService,
+    public ::v1::com::ford::rnd::SmartMLStubDefault {
  public:
   SmartMLService();
   virtual ~SmartMLService();
