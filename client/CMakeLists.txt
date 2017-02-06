@@ -1,10 +1,13 @@
 project(MLClient)
 
-set(SOURCE client.cpp)
+set(CMAKE_MODULE_PATH ${MODULES_PATH})
+include(IpcMacro)
 
 add_capi_types(MLProxy com.ford.rnd.MLTypes:1)
 add_capi_interfaces(MLProxy com.ford.rnd.ML:1 com.ford.rnd.SmartML:1)
 add_capi_library(MLProxy)
+
+set(SOURCE client.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE})
 target_link_libraries(${PROJECT_NAME} MLProxy CommonAPI)
