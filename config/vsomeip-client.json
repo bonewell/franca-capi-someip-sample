@@ -8,7 +8,7 @@
         "file" : { "enable" : "false", "path" : "vsomeip.log" },
         "dlt" : "false"
     },
-    "applications" : 
+    "applications" :
     [
         {
             "name" : "client-sample",
@@ -18,8 +18,12 @@
     "clients" :
     [
         {
-            "service" : "0x1234",
-            "instance" : "0x5678"
+            "service" : 4660,
+            "instance" : 22135
+        },
+        {
+            "service" : 4660,
+            "instance" : 22136
         }
     ],
     "routing" : "client-sample",

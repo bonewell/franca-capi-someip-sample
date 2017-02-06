@@ -31,7 +31,7 @@ define org.genivi.commonapi.someip.deployment for interface com.ford.rnd.Buttons
 
 define org.genivi.commonapi.someip.deployment for provider FordRndService {
   instance com.ford.rnd.Buttons {
-    InstanceId = "com.ford.rnd"
-    SomeIpInstanceID = 22136
+    InstanceId = "com.ford.rnd.Buttons"
+    SomeIpInstanceID = 22137
   }
 }

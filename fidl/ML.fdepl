@@ -59,7 +59,7 @@ define org.genivi.commonapi.someip.deployment for interface com.ford.rnd.ML {
 
 define org.genivi.commonapi.someip.deployment for provider FordRndService {
   instance com.ford.rnd.ML {
-    InstanceId = "com.ford.rnd"
-    SomeIpInstanceID = 22136
+    InstanceId = "com.ford.rnd.ML"
+    SomeIpInstanceID = 22135
   }
 }

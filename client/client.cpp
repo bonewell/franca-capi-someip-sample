@@ -34,7 +34,7 @@ std::ostream& operator<<(std::ostream& out, const MLTypes::Countries& countries)
 
 int main() {
   std::string domain = "local";
-  std::string instance = "ford.rnd.ML";
+  std::string instance = "com.ford.rnd.ML";
   std::shared_ptr<CommonAPI::Runtime> runtime = CommonAPI::Runtime::get();
   std::shared_ptr<MLProxyDefault> myProxy = runtime->buildProxy < MLProxy
       > (domain, instance);
@@ -95,7 +95,7 @@ int main() {
   myProxy->getCountries(callStatus, countries);
   std::cout << "Countries: " << countries << std::endl;
 
-  std::string s_instance = "ford.rnd.SmartML";
+  std::string s_instance = "com.ford.rnd.SmartML";
   std::shared_ptr<SmartMLProxyDefault> mySProxy = runtime->buildProxy
       < SmartMLProxy > (domain, s_instance);
 

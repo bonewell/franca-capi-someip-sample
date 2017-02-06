@@ -2,9 +2,9 @@
     "unicast" : "172.16.47.1",
     "logging" :
     {
-        "level" : "debug",
+        "level" : "trace",
         "console" : "true",
-        "file" : { "enable" : "false", "path" : "vsomeip.log" },
+        "file" : { "enable" : "true", "path" : "vsomeip.log" },
         "dlt" : "false"
     },
     "applications" : 
@@ -16,16 +16,25 @@
         {
             "name" : "service-sample",
             "id" : "0x1277"
-        }            
+        }
     ],
     "services" :
     [
         {
-            "service" : "0x1234",
-            "instance" : "0x5678",
+            "service" : 4660,
+            "instance" : 22135,
+            "reliable" : { "port" : "31000", "enable-magic-cookies" : "false" }
+        },
+        {
+            "service" : 4660,
+            "instance" : 22136,
+            "reliable" : { "port" : "31000", "enable-magic-cookies" : "false" }
+        },
+        {
+            "service" : 4660,
+            "instance" : 22137,
             "reliable" : { "port" : "31000", "enable-magic-cookies" : "false" }
         }
-        
     ],
     "routing" : "vsomeipd",
     "service-discovery" :

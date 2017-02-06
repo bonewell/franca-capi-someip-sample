@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sudo route add -net 224.0.0.0/4 dev ens33
+sudo route add -net 224.0.0.0/4 dev vmnet8
 VSOMEIP_PATH=~/git/genivi/vsomeip/build
 export LD_LIBRARY_PATH=${VSOMEIP_PATH}:$LD_LIBRARY_PATH
 export VSOMEIP_APPLICATION_NAME=vsomeipd

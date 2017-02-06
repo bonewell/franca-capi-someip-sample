@@ -17,3 +17,9 @@ define org.genivi.commonapi.someip.deployment for interface com.ford.rnd.SmartML
   }
 }
 
+define org.genivi.commonapi.someip.deployment for provider FordRndService {
+  instance com.ford.rnd.SmartML {
+    InstanceId = "com.ford.rnd.SmartML"
+    SomeIpInstanceID = 22136
+  }
+}
