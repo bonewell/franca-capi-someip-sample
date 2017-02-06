@@ -3,45 +3,55 @@
 set(capi-core-gen ${COMMONAPI_PATH}/capicxx-core-tools/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-generator-linux-x86_64)
 set(capi-someip-gen ${COMMONAPI_PATH}/capicxx-someip-tools/org.genivi.commonapi.someip.cli.product/target/products/org.genivi.commonapi.someip.cli.product/linux/gtk/x86_64/commonapi-someip-generator-linux-x86_64)
 
-function(get_interface_path IName IPath)
-    string(FIND ${IName} ":" DELIMITER_INDEX)
-    string(SUBSTRING ${IName} 0 ${DELIMITER_INDEX} INTERFACE_NAME)
+function(get_interface_path Interface IPath)
+    string(FIND ${Interface} ":" DELIMITER_INDEX)
+    string(SUBSTRING ${Interface} 0 ${DELIMITER_INDEX} INTERFACE_NAME)
     string(REPLACE "." "/" INTERFACE_PATH ${INTERFACE_NAME})
     set(${IPath} ${INTERFACE_PATH} PARENT_SCOPE)
 endfunction(get_interface_path)
 
 
-function(get_interface_file IName IFile)
-    string(FIND ${IName} ":" DELIMITER_INDEX)
-    string(SUBSTRING ${IName} 0 ${DELIMITER_INDEX} INTERFACE_NAME)
+function(get_interface_name Interface IName)
+    string(FIND ${Interface} ":" DELIMITER_INDEX)
+    string(SUBSTRING ${Interface} 0 ${DELIMITER_INDEX} INTERFACE_NAME)
     string(FIND ${INTERFACE_NAME} "." FDEPL_INDEX REVERSE)
     math(EXPR FILE_INDEX ${FDEPL_INDEX}+1)
     string(SUBSTRING ${INTERFACE_NAME} ${FILE_INDEX} -1 FILE_NAME)
-    set(${IFile} ${FILE_NAME} PARENT_SCOPE)
-endfunction(get_interface_file)
+    set(${IName} ${FILE_NAME} PARENT_SCOPE)
+endfunction(get_interface_name)
 
 
-function(get_interface_version IName IVersion)
-    string(FIND ${IName} ":" DELIMITER_INDEX)
+function(get_interface_version Interface IVersion)
+    string(FIND ${Interface} ":" DELIMITER_INDEX)
     math(EXPR VERSION_INDEX ${DELIMITER_INDEX}+1)
-    string(SUBSTRING ${IName} ${VERSION_INDEX} -1 INTERFACE_VERSION)
+    string(SUBSTRING ${Interface} ${VERSION_INDEX} -1 INTERFACE_VERSION)
     set(${IVersion} ${INTERFACE_VERSION} PARENT_SCOPE)
 endfunction(get_interface_version)
 
 
+function(get_fidl_file Interface FileName)
+    get_interface_name(${Interface} INTERFACE_NAME)
+    set(${FileName} ${INTERFACE_NAME}.fidl PARENT_SCOPE)
+endfunction(get_fidl_file)
+
+
+function(get_fdepl_file Interface FileName)
+    get_interface_name(${Interface} INTERFACE_NAME)
+    set(${FileName} ${INTERFACE_NAME}.fdepl PARENT_SCOPE)
+endfunction(get_fdepl_file)
+
+
 macro(append_fidl_file Target FileName)
     set(FIDL_LINK ${Target}_FIDL_FILES)
-    list(APPEND ${FIDL_LINK}
-        ${FIDL_PATH}/${FileName}.fidl
-    )
+    message(STATUS "Add FIDL: ${FileName} -> ${FIDL_LINK}")
+    list(APPEND ${FIDL_LINK} ${FileName})
 endmacro(append_fidl_file)
 
 
 macro(append_fdepl_file Target FileName)
     set(FDEPL_LINK ${Target}_FDEPL_FILES)
-    list(APPEND ${FDEPL_LINK}
-        ${FIDL_PATH}/${FileName}.fdepl
-    )
+    message(STATUS "Add FEDL: ${FileName} -> ${FDEPL_LINK}")
+    list(APPEND ${FDEPL_LINK} ${FileName})
 endmacro(append_fdepl_file)
 
 
@@ -75,9 +85,10 @@ macro(add_someip_types Target Type...)
         get_interface_path(${iface} INTERFACE_PATH)
         get_interface_version(${iface} INTERFACE_VERSION)
         append_someip_type_collection(${Target} ${INTERFACE_PATH} ${INTERFACE_VERSION})
-        get_interface_file(${iface} FILE_NAME)
-        append_fidl_file(${Target} ${FILE_NAME})
-        append_fdepl_file(${Target} ${FILE_NAME})
+        get_fidl_file(${iface} FIDL_FILE)
+        append_fidl_file(${Target} ${FIDL_PATH}/${FIDL_FILE})
+        get_fdepl_file(${iface} FDEPL_FILE)
+        append_fdepl_file(${Target} ${FIDL_PATH}/${FDEPL_FILE})
     endforeach(iface)
 endmacro(add_someip_types)
 
@@ -94,9 +105,10 @@ macro(add_someip_interfaces Target Interface...)
         get_interface_path(${iface} INTERFACE_PATH)
         get_interface_version(${iface} INTERFACE_VERSION)
         append_someip_interface(${Target} ${INTERFACE_PATH} ${INTERFACE_VERSION})
-        get_interface_file(${iface} FILE_NAME)
-        append_fidl_file(${Target} ${FILE_NAME})
-        append_fdepl_file(${Target} ${FILE_NAME})
+        get_fidl_file(${iface} FIDL_FILE)
+        append_fidl_file(${Target} ${FIDL_PATH}/${FIDL_FILE})
+        get_fdepl_file(${iface} FDEPL_FILE)
+        append_fdepl_file(${Target} ${FIDL_PATH}/${FDEPL_FILE})
     endforeach(iface)
 endmacro(add_someip_interfaces)
 
@@ -105,6 +117,9 @@ macro(add_someip_library Target)
     set(SOURCE_LINK ${Target}_SOURCE_SOMEIP_FILES)
     set(FIDL_LINK ${Target}_FIDL_FILES)
     set(FDEPL_LINK ${Target}_FDEPL_FILES)
+    message(STATUS "Fidls: ${${FIDL_LINK}}")
+    message(STATUS "Fdepls: ${${FDEPL_LINK}}")
+    message(STATUS "Sources: ${${SOURCE_LINK}}")
     add_custom_command(OUTPUT ${${SOURCE_LINK}}
         COMMAND ${capi-core-gen} --printfiles
             --dest ${CMAKE_CURRENT_BINARY_DIR} ${${FIDL_LINK}}
@@ -140,10 +155,8 @@ macro(add_capi_types Target Type...)
     list(REMOVE_AT Types 0)
     message(STATUS "Configure collections of types for CommonAPI - [ ${Types} ]")
     foreach(iface ${Types})
-        get_interface_path(${iface} INTERFACE_PATH)
-        get_interface_version(${iface} INTERFACE_VERSION)
-        get_interface_file(${iface} FILE_NAME)
-        append_fidl_file(${Target} ${FILE_NAME})
+        get_fidl_file(${iface} FIDL_FILE)
+        append_fidl_file(${Target} ${FIDL_PATH}/${FIDL_FILE})
     endforeach(iface)
 endmacro(add_capi_types)
 
@@ -160,8 +173,8 @@ macro(add_capi_interfaces Target Interface...)
         get_interface_path(${iface} INTERFACE_PATH)
         get_interface_version(${iface} INTERFACE_VERSION)
         append_capi_interface(${Target} ${INTERFACE_PATH} ${INTERFACE_VERSION})
-        get_interface_file(${iface} FILE_NAME)
-        append_fidl_file(${Target} ${FILE_NAME})
+        get_fidl_file(${iface} FIDL_FILE)
+        append_fidl_file(${Target} ${FIDL_PATH}/${FIDL_FILE})
     endforeach(iface)
 endmacro(add_capi_interfaces)
 

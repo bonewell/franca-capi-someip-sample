@@ -1,5 +1,8 @@
 project(MLService)
 
+set(COMMONAPI_PATH ${COMMONAPI})
+set(FIDL_PATH ${FIDL})
+
 set(CMAKE_MODULE_PATH ${MODULES_PATH})
 include(IpcMacro)
 

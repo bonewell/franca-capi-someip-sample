@@ -1,7 +1,7 @@
 project(Libraries)
 
-set(COMMONAPI_PATH /home/kolodiy/git/genivi)
-set(FIDL_PATH ${CMAKE_SOURCE_DIR}/fidl)
+set(COMMONAPI_PATH ${COMMONAPI})
+set(FIDL_PATH ${FIDL})
 
 find_package(CommonAPI 3.1.10 REQUIRED)
 find_package(vsomeip 2.5.2 REQUIRED)
