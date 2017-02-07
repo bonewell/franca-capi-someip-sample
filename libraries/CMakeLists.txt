@@ -20,3 +20,8 @@ include(IpcMacro)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 include(ML)
 include(Buttons)
+
+install(TARGETS ML Buttons
+  LIBRARY DESTINATION ${CMAKE_BINARY_DIR}/build/lib
+  PERMISSIONS OWNER_READ OWNER_WRITE
+)

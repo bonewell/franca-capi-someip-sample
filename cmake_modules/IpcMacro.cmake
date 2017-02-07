@@ -1,7 +1,42 @@
+#
 # Macros and functions for build support of Inter-process communication
+#
+# You have to set two variables COMMONAPI_PATH and FIDL_PATH e.g.:
+#
+# set(COMMONAPI_PATH ~/git/genivi)
+# set(FIDL_PATH ~/git/myproject/fidl)
+#
+# List of functions for public using:
+#    - add_capi_types
+#    - add_capi_interfaces
+#    - add_capi_library
+#    - add_someip_types
+#    - add_someip_interfaces
+#    - add_someip_library
+#
+# Examples:
+#
+# 1) Build static library of your project using CommonAPI-Core
+#
+#    add_capi_types(MyTarget com.mycom.TypeCollection:1)
+#    add_capi_interfaces(MyTarget com.mycom.Interface:1 com.mycom.MyInterface:2)
+#    add_capi_library(MyTarget)
+#
+# 2) Build shared library using CommonAPI-SomeIP
+#
+#    add_someip_types(MyLibTarget com.mycom.TypeCollection:1)
+#    add_someip_interfaces(MyLibTarget com.mycom.Interface:1 com.mycom.MyInterface:2)
+#    add_someip_library(MyLibTarget)
+#
+
 
 set(capi-core-gen ${COMMONAPI_PATH}/capicxx-core-tools/org.genivi.commonapi.core.cli.product/target/products/org.genivi.commonapi.core.cli.product/linux/gtk/x86_64/commonapi-generator-linux-x86_64)
 set(capi-someip-gen ${COMMONAPI_PATH}/capicxx-someip-tools/org.genivi.commonapi.someip.cli.product/target/products/org.genivi.commonapi.someip.cli.product/linux/gtk/x86_64/commonapi-someip-generator-linux-x86_64)
+
+
+#
+# Private functions, they should not be used outside of this file.
+#
 
 function(get_interface_path Interface IPath)
     string(FIND ${Interface} ":" DELIMITER_INDEX)
@@ -41,41 +76,58 @@ function(get_fdepl_file Interface FileName)
 endfunction(get_fdepl_file)
 
 
-macro(append_fidl_file Target FileName)
+function(append_fidl_file Target FileName)
     set(FIDL_LINK ${Target}_FIDL_FILES)
-    message(STATUS "Add FIDL: ${FileName} -> ${FIDL_LINK}")
     list(APPEND ${FIDL_LINK} ${FileName})
-endmacro(append_fidl_file)
+    set(${FIDL_LINK} ${${FIDL_LINK}} PARENT_SCOPE)
+endfunction(append_fidl_file)
 
 
-macro(append_fdepl_file Target FileName)
+function(append_fdepl_file Target FileName)
     set(FDEPL_LINK ${Target}_FDEPL_FILES)
-    message(STATUS "Add FEDL: ${FileName} -> ${FDEPL_LINK}")
     list(APPEND ${FDEPL_LINK} ${FileName})
-endmacro(append_fdepl_file)
+    set(${FDEPL_LINK} ${${FDEPL_LINK}} PARENT_SCOPE)
+endfunction(append_fdepl_file)
 
 
-macro(append_someip_type_collection Target Path Version)
+function(append_someip_type_collection Target Path Version)
     set(SOURCE_LINK ${Target}_SOURCE_SOMEIP_FILES)
-    list(APPEND ${SOURCE__LINK}
+    list(APPEND ${SOURCE_LINK}
         ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}SomeIPDeployment.cpp
     )
-endmacro(append_someip_type_collection)
+    set(${SOURCE_LINK} ${${SOURCE_LINK}} PARENT_SCOPE)
+endfunction(append_someip_type_collection)
 
 
-macro(append_someip_interface Target Path Version)
+function(append_someip_interface Target Path Version)
     set(SOURCE_LINK ${Target}_SOURCE_SOMEIP_FILES)
     list(APPEND ${SOURCE_LINK}
         ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}SomeIPStubAdapter.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}SomeIPDeployment.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}SomeIPProxy.cpp
     )
-endmacro(append_someip_interface)
+    set(${SOURCE_LINK} ${${SOURCE_LINK}} PARENT_SCOPE)
+endfunction(append_someip_interface)
 
 
+function(append_capi_interface Target Path Version)
+    set(SOURCE_LINK ${Target}_SOURCE_CAPI_FILES)
+    list(APPEND ${SOURCE_LINK}
+        ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}StubDefault.cpp
+    )
+    set(${SOURCE_LINK} ${${SOURCE_LINK}} PARENT_SCOPE)
+endfunction(append_capi_interface)
+
+#
+# (End) Private functions, they should not be used outside of this file.
+#
+
+
+#
 # Type is formated string:
 # <name>[.<name>...]:<major_version>
 # For example: ford.rnd.types.VR:1
+#
 
 macro(add_someip_types Target Type...)
     set(Types ${ARGV})
@@ -93,9 +145,11 @@ macro(add_someip_types Target Type...)
 endmacro(add_someip_types)
 
 
+#
 # Interface is formated string:
 # <name>[.<name>...]:<major_version>
 # For example: ford.rnd.VR:1
+#
 
 macro(add_someip_interfaces Target Interface...)
     set(Interfaces ${ARGV})
@@ -113,13 +167,10 @@ macro(add_someip_interfaces Target Interface...)
 endmacro(add_someip_interfaces)
 
 
-macro(add_someip_library Target)
+function(add_someip_library Target)
     set(SOURCE_LINK ${Target}_SOURCE_SOMEIP_FILES)
     set(FIDL_LINK ${Target}_FIDL_FILES)
     set(FDEPL_LINK ${Target}_FDEPL_FILES)
-    message(STATUS "Fidls: ${${FIDL_LINK}}")
-    message(STATUS "Fdepls: ${${FDEPL_LINK}}")
-    message(STATUS "Sources: ${${SOURCE_LINK}}")
     add_custom_command(OUTPUT ${${SOURCE_LINK}}
         COMMAND ${capi-core-gen} --printfiles
             --dest ${CMAKE_CURRENT_BINARY_DIR} ${${FIDL_LINK}}
@@ -130,25 +181,15 @@ macro(add_someip_library Target)
     )
     add_library(${Target} SHARED ${${SOURCE_LINK}})
     target_link_libraries(${Target} CommonAPI-SomeIP)
-    install(TARGETS ${Target}
-        LIBRARY DESTINATION ${CMAKE_BINARY_DIR}/build/lib
-        PERMISSIONS OWNER_READ OWNER_WRITE
-    )
     message(STATUS "Configure ${Target} (SOME/IP) library")
-endmacro(add_someip_library)
+endfunction(add_someip_library)
 
 
-macro(append_capi_interface Target Path Version)
-    set(SOURCE_LINK ${Target}_SOURCE_CAPI_FILES)
-    list(APPEND ${SOURCE_LINK}
-        ${CMAKE_CURRENT_BINARY_DIR}/v${Version}/${Path}StubDefault.cpp
-    )
-endmacro(append_capi_interface)
-
-
+#
 # Type is formated string:
 # <name>[.<name>...]:<major_version>
 # For example: ford.rnd.types.VR:1
+#
 
 macro(add_capi_types Target Type...)
     set(Types ${ARGV})
@@ -161,9 +202,11 @@ macro(add_capi_types Target Type...)
 endmacro(add_capi_types)
 
 
+#
 # Interface is formated string:
 # <name>[.<name>...]:<major_version>
 # For example: ford.rnd.VR:1
+#
 
 macro(add_capi_interfaces Target Interface...)
     set(Interfaces ${ARGV})
@@ -179,7 +222,7 @@ macro(add_capi_interfaces Target Interface...)
 endmacro(add_capi_interfaces)
 
 
-macro(add_capi_library Target)
+function(add_capi_library Target)
     find_package(CommonAPI 3.1.10 REQUIRED)
     include_directories(
         ${CMAKE_CURRENT_BINARY_DIR}
@@ -195,4 +238,4 @@ macro(add_capi_library Target)
     )
     add_library(${Target} ${${SOURCE_LINK}})
     message(STATUS "Configure ${Target} (CommonAPI) library")
-endmacro(add_capi_library)
+endfunction(add_capi_library)
