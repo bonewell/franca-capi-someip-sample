@@ -14,9 +14,9 @@ In order to have less issues while building and running this sample, do next:
 * make install for capicxx-core-runtime, vsomeip and capicxx-someip-runtime
 * build generators capicxx-core-tools and capicxx-someip-tools (see manual for these projects)
 
-Also you might read our [WiKi article](wiki)
+Also you might read our [WiKi article](https://github.com/bonewell/franca-capi-someip-sample/wiki)
 
-If you are interested in QNX 6.6 you might look at [Build for QNX 6.6](wiki/Build-for-QNX-6.6)
+If you are interested in QNX 6.6 you might look at [Build for QNX 6.6](https://github.com/bonewell/franca-capi-someip-sample/wiki/Build-for-QNX-6.6)
 
 Steps to build and install of this sample:
 ```Shell
