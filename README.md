@@ -15,6 +15,7 @@ In order to have less issues while building and running this sample, do next:
 * build generators capicxx-core-tools and capicxx-someip-tools (see manual for these projects)
 
 Also you might read our [WiKi article](wiki)
+
 If you are interested in QNX 6.6 you might look at [Build for QNX 6.6](wiki/Build-for-QNX-6.6)
 
 Steps to build and install of this sample:
