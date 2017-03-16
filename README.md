@@ -14,6 +14,9 @@ In order to have less issues while building and running this sample, do next:
 * make install for capicxx-core-runtime, vsomeip and capicxx-someip-runtime
 * build generators capicxx-core-tools and capicxx-someip-tools (see manual for these projects)
 
+Also you might read our [WiKi article](wiki)
+If you are interested in QNX 6.6 you might look at [Build for QNX 6.6](wiki/Build-for-QNX-6.6)
+
 Steps to build and install of this sample:
 ```Shell
 cd /franca-capi-someip-sample
@@ -22,6 +25,15 @@ cd build
 cmake ..
 make
 make install
+```
+
+Build for QNX 6.6:
+```Shell
+source <QNX_SDP>/qnx660-env.sh
+mkdir build
+cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=../qnx_6.6.0_linux_x86.cmake ..
+make
 ```
 
 In order to run the sample you need two hosts (two PC or two virtual machines).
