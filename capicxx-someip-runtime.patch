@@ -1,0 +1,126 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e07b665..9990f55 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,6 +9,7 @@ project (CommonAPI-SomeIP)
+ 
+ set (CMAKE_VERBOSE_MAKEFILE off)
+ 
++set (CMAKE_CXX_STANDARD 11)
+ set (LIBCOMMONAPI_SOMEIP_MAJOR_VERSION 3)
+ set (LIBCOMMONAPI_SOMEIP_MINOR_VERSION 1)
+ set (LIBCOMMONAPI_SOMEIP_PATCH_VERSION 10)
+@@ -57,7 +58,7 @@ include_directories( ${Boost_INCLUDE_DIR} )
+ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CRT_SECURE_NO_WARNINGS /wd4503")
+ link_directories(${Boost_LIBRARY_DIR})
+ else()
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -Wextra -Wformat -Wformat-security -Wconversion -fexceptions -fstrict-aliasing -fstack-protector -fasynchronous-unwind-tables -fno-omit-frame-pointer -DCOMMONAPI_INTERNAL_COMPILATION -D_GLIBCXX_USE_NANOSLEEP")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wformat -Wformat-security -Wconversion -fexceptions -fstrict-aliasing -fstack-protector -fasynchronous-unwind-tables -fno-omit-frame-pointer -DCOMMONAPI_INTERNAL_COMPILATION -D_GLIBCXX_USE_NANOSLEEP")
+ endif()
+ 
+ SET(MAX_LOG_LEVEL "DEBUG" CACHE STRING "maximum log level")
+@@ -79,6 +80,7 @@ endmacro ()
+ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+     set (OS "LINUX")
+     set (NO_DEPRECATED_REGISTER "")
++    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+ endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+ 
+ if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+@@ -86,8 +88,13 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+     set (NO_DEPRECATED_REGISTER "-Wno-deprecated-register")
+ endif (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+ 
++if (${CMAKE_SYSTEM_NAME} MATCHES "QNX")
++    set (OS "QNX")
++    set (NO_DEPRECATED_REGISTER "")
++endif (${CMAKE_SYSTEM_NAME} MATCHES "QNX")
++
+ if (NOT MSVC)
+-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${OS} ${NO_DEPRECATED_REGISTER} -DBOOST_LOG_DYN_LINK -pthread -g -std=c++0x -O0")
++    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${OS} ${NO_DEPRECATED_REGISTER} -DBOOST_LOG_DYN_LINK -g -O0")
+ endif()
+ # END TEMPORARY WORKAROUND #
+ 
+diff --git a/src/CommonAPI/SomeIP/InputStream.cpp b/src/CommonAPI/SomeIP/InputStream.cpp
+index 4de6ad7..e5c5631 100644
+--- a/src/CommonAPI/SomeIP/InputStream.cpp
++++ b/src/CommonAPI/SomeIP/InputStream.cpp
+@@ -14,6 +14,12 @@
+ #include <CommonAPI/SomeIP/InputStream.hpp>
+ #include <CommonAPI/SomeIP/StringEncoder.hpp>
+ 
++#ifdef __QNX__
++#  include <gulliver.h>
++#  define BIG_ENDIAN 123
++#  define LITTLE_ENDIAN 321
++#endif  // __QNX__
++
+ namespace CommonAPI {
+ namespace SomeIP {
+ 
+diff --git a/src/CommonAPI/SomeIP/OutputStream.cpp b/src/CommonAPI/SomeIP/OutputStream.cpp
+index 3e51772..acd033b 100644
+--- a/src/CommonAPI/SomeIP/OutputStream.cpp
++++ b/src/CommonAPI/SomeIP/OutputStream.cpp
+@@ -17,6 +17,12 @@
+ #include <CommonAPI/SomeIP/OutputStream.hpp>
+ #include <CommonAPI/SomeIP/StringEncoder.hpp>
+ 
++#ifdef __QNX__
++#  include <gulliver.h>
++#  define BIG_ENDIAN 123
++#  define LITTLE_ENDIAN 321
++#endif  // __QNX__
++
+ namespace CommonAPI {
+ namespace SomeIP {
+ 
+diff --git a/src/CommonAPI/SomeIP/StringEncoder.cpp b/src/CommonAPI/SomeIP/StringEncoder.cpp
+index b8c7c48..24509e5 100644
+--- a/src/CommonAPI/SomeIP/StringEncoder.cpp
++++ b/src/CommonAPI/SomeIP/StringEncoder.cpp
+@@ -5,6 +5,12 @@
+ 
+ #include <CommonAPI/SomeIP/StringEncoder.hpp>
+ 
++#ifdef __QNX__
++#  include <gulliver.h>
++#  define BIG_ENDIAN 123
++#  define LITTLE_ENDIAN 321
++#endif  // __QNX__
++
+ namespace CommonAPI {
+ namespace SomeIP {
+ 
+diff --git a/src/CommonAPI/SomeIP/Watch.cpp b/src/CommonAPI/SomeIP/Watch.cpp
+index efac1b2..b05d53d 100644
+--- a/src/CommonAPI/SomeIP/Watch.cpp
++++ b/src/CommonAPI/SomeIP/Watch.cpp
+@@ -5,6 +5,8 @@
+ 
+ #include <CommonAPI/SomeIP/Watch.hpp>
+ 
++#include <sys/types.h>
++#include <unistd.h>
+ #include <fcntl.h>
+ #include <cstdio>
+ 
+@@ -144,6 +146,17 @@ Watch::Watch(const std::shared_ptr<Connection>& _connection) : pipeValue_(4) {
+         closesocket(ListenSocket);
+         WSACleanup();
+     }
++#elif defined(__QNX__)
++    if(pipe(pipeFileDescriptors_) == -1) {
++        std::perror(__func__);
++    }
++    for (auto fd : pipeFileDescriptors_) {
++        int flags = fcntl(fd, F_GETFL);
++        flags |= O_NONBLOCK;
++        if (fcntl(fd, F_SETFL, flags) == -1) {
++            std::perror(__func__);
++        }
++    }
+ #else
+     if(pipe2(pipeFileDescriptors_, O_NONBLOCK) == -1) {
+         std::perror(__func__);
