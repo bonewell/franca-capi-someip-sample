@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index e07b665..9490666 100644
+index e07b665..e219cc9 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -9,6 +9,7 @@ project (CommonAPI-SomeIP)
@@ -10,17 +10,7 @@ index e07b665..9490666 100644
  set (LIBCOMMONAPI_SOMEIP_MAJOR_VERSION 3)
  set (LIBCOMMONAPI_SOMEIP_MINOR_VERSION 1)
  set (LIBCOMMONAPI_SOMEIP_PATCH_VERSION 10)
-@@ -40,7 +41,8 @@ add_definitions(-DDEFAULT_SEND_TIMEOUT=${DEFAULT_SEND_TIMEOUT})
- 
- if (MSVC) 
- # Boost
--find_package( Boost 1.54 COMPONENTS system thread log REQUIRED )
-+set(Boost_USE_STATIC_LIBS ON)
-+find_package( Boost 1.55 COMPONENTS log thread system REQUIRED )
- if(Boost_FOUND)
-   if(Boost_LIBRARY_DIR)
-     MESSAGE( STATUS "Boost_LIBRARY_DIR not empty using it: ${Boost_LIBRARY_DIR}" )
-@@ -57,7 +59,7 @@ include_directories( ${Boost_INCLUDE_DIR} )
+@@ -57,7 +58,7 @@ include_directories( ${Boost_INCLUDE_DIR} )
  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CRT_SECURE_NO_WARNINGS /wd4503")
  link_directories(${Boost_LIBRARY_DIR})
  else()
@@ -29,7 +19,7 @@ index e07b665..9490666 100644
  endif()
  
  SET(MAX_LOG_LEVEL "DEBUG" CACHE STRING "maximum log level")
-@@ -79,6 +81,7 @@ endmacro ()
+@@ -79,6 +80,7 @@ endmacro ()
  if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
      set (OS "LINUX")
      set (NO_DEPRECATED_REGISTER "")
@@ -37,13 +27,14 @@ index e07b665..9490666 100644
  endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
  
  if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
-@@ -86,8 +89,13 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+@@ -86,8 +88,14 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
      set (NO_DEPRECATED_REGISTER "-Wno-deprecated-register")
  endif (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
  
 +if (${CMAKE_SYSTEM_NAME} MATCHES "QNX")
 +    set (OS "QNX")
 +    set (NO_DEPRECATED_REGISTER "")
++    set (Boost_USE_STATIC_LIBS ON)
 +endif (${CMAKE_SYSTEM_NAME} MATCHES "QNX")
 +
  if (NOT MSVC)
@@ -74,6 +65,19 @@ index 324484b..68757cf 100644
      static std::future<CallStatus> callMethodAsync(
                      Proxy_ &_proxy,
                      Message &_message,
+diff --git a/include/CommonAPI/SomeIP/StringEncoder.hpp b/include/CommonAPI/SomeIP/StringEncoder.hpp
+index ee8bd0c..6ed73c3 100644
+--- a/include/CommonAPI/SomeIP/StringEncoder.hpp
++++ b/include/CommonAPI/SomeIP/StringEncoder.hpp
+@@ -14,7 +14,7 @@
+ #include <CommonAPI/SomeIP/Types.hpp>
+ #include <vector>
+ 
+-#if WIN32
++#if defined(WIN32) || defined(__QNX__)
+     #define LITTLE_ENDIAN 1234
+     #define BIG_ENDIAN 4321
+ #endif
 diff --git a/src/CommonAPI/SomeIP/Connection.cpp b/src/CommonAPI/SomeIP/Connection.cpp
 index 02990b4..9199f5a 100644
 --- a/src/CommonAPI/SomeIP/Connection.cpp
@@ -87,57 +91,6 @@ index 02990b4..9199f5a 100644
      }
  
      std::unique_lock<std::mutex> lock(sendAndBlockMutex_);
-diff --git a/src/CommonAPI/SomeIP/InputStream.cpp b/src/CommonAPI/SomeIP/InputStream.cpp
-index 4de6ad7..e5c5631 100644
---- a/src/CommonAPI/SomeIP/InputStream.cpp
-+++ b/src/CommonAPI/SomeIP/InputStream.cpp
-@@ -14,6 +14,12 @@
- #include <CommonAPI/SomeIP/InputStream.hpp>
- #include <CommonAPI/SomeIP/StringEncoder.hpp>
- 
-+#ifdef __QNX__
-+#  include <gulliver.h>
-+#  define BIG_ENDIAN 123
-+#  define LITTLE_ENDIAN 321
-+#endif  // __QNX__
-+
- namespace CommonAPI {
- namespace SomeIP {
- 
-diff --git a/src/CommonAPI/SomeIP/OutputStream.cpp b/src/CommonAPI/SomeIP/OutputStream.cpp
-index 3e51772..acd033b 100644
---- a/src/CommonAPI/SomeIP/OutputStream.cpp
-+++ b/src/CommonAPI/SomeIP/OutputStream.cpp
-@@ -17,6 +17,12 @@
- #include <CommonAPI/SomeIP/OutputStream.hpp>
- #include <CommonAPI/SomeIP/StringEncoder.hpp>
- 
-+#ifdef __QNX__
-+#  include <gulliver.h>
-+#  define BIG_ENDIAN 123
-+#  define LITTLE_ENDIAN 321
-+#endif  // __QNX__
-+
- namespace CommonAPI {
- namespace SomeIP {
- 
-diff --git a/src/CommonAPI/SomeIP/StringEncoder.cpp b/src/CommonAPI/SomeIP/StringEncoder.cpp
-index b8c7c48..24509e5 100644
---- a/src/CommonAPI/SomeIP/StringEncoder.cpp
-+++ b/src/CommonAPI/SomeIP/StringEncoder.cpp
-@@ -5,6 +5,12 @@
- 
- #include <CommonAPI/SomeIP/StringEncoder.hpp>
- 
-+#ifdef __QNX__
-+#  include <gulliver.h>
-+#  define BIG_ENDIAN 123
-+#  define LITTLE_ENDIAN 321
-+#endif  // __QNX__
-+
- namespace CommonAPI {
- namespace SomeIP {
- 
 diff --git a/src/CommonAPI/SomeIP/Watch.cpp b/src/CommonAPI/SomeIP/Watch.cpp
 index efac1b2..b05d53d 100644
 --- a/src/CommonAPI/SomeIP/Watch.cpp
