@@ -1,6 +1,6 @@
+#include <unistd.h>
 #include <memory>
 #include <iostream>
-#include <thread>
 #include "CommonAPI/CommonAPI.hpp"
 #include "mlservice.hpp"
 #include "smartmlservice.hpp"
@@ -38,7 +38,7 @@ int main() {
 
     while (true) {
         std::cout << "Waiting for calls... (Abort with CTRL+C)" << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(30));
+        sleep(30);
     }
 
     return 0;

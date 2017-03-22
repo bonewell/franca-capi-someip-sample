@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "QNX")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
+endif(${CMAKE_SYSTEM_NAME} MATCHES "QNX")
 
 set(COMMONAPI /home/kolodiy/git/genivi)
 set(FIDL ${CMAKE_SOURCE_DIR}/fidl)
@@ -17,7 +23,7 @@ string(REGEX REPLACE
 )
 set(ENV{PATH} ${NEW_PATH})
 
-find_package(Java 1.8 REQUIRED)
+find_package(Java 1.8)
 
 install(DIRECTORY config
     DESTINATION ${CMAKE_BINARY_DIR}/build)
