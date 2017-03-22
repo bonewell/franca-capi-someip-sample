@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_CXX_STANDARD 11)
+set(SCRIPTS_DIR scripts)
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "QNX")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
+    set(SCRIPTS_DIR scripts_qnx)
 endif(${CMAKE_SYSTEM_NAME} MATCHES "QNX")
 
 set(COMMONAPI /home/kolodiy/git/genivi)
@@ -28,7 +30,7 @@ find_package(Java 1.8)
 install(DIRECTORY config
     DESTINATION ${CMAKE_BINARY_DIR}/build)
 
-install(DIRECTORY scripts
+install(DIRECTORY ${SCRIPTS_DIR}
     DESTINATION ${CMAKE_BINARY_DIR}/build
     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
 
