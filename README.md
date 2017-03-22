@@ -25,7 +25,6 @@ mkdir build
 cd build
 cmake ..
 make
-make install
 ```
 
 Build for QNX 6.6:
@@ -33,17 +32,28 @@ Build for QNX 6.6:
 source <QNX_SDP>/qnx660-env.sh
 mkdir build
 cd build
-cmake -DCMAKE_TOOLCHAIN_FILE=../qnx_6.6.0_linux_x86.cmake ..
+cmake -DCMAKE_TOOLCHAIN_FILE=../qnx_6.6.0_linux_x86.cmake -DCMAKE_INSTALL_PREFIX=deploy ..
 make
+make install
+```
+
+Deploy to QNX 6.6
+```Shell
+cp <your_path>/vsomeipd deploy/bin
+cp <your_path>/libvsomeip* deploy/lib
+cp <your_path>/libCommonAPI* deploy/lib
+cp <your_path>/libCommonAPI-SomeIP* deploy/lib
+tar -cf sample.tar deploy
+scp sample.tar root@<target_ip>:~
 ```
 
 In order to run the sample you need two hosts (two PC or two virtual machines).
 Set up the sample for your network (see build/build/config/vsomeip-service.json and build/build/config/vsomeip-client.json)
 Change `unicast` fields.
 Also you have to change network device in bash scripts (see build/build/scripts/vsomeipd.sh and build/build/scripts/client.sh)
-`sudo route add -net 224.0.0.0/4 dev ens33`
+`sudo route add -net 224.0.0.0/4 dev ens33` or for QNX 6.6 `route add -net 224.0.0.0/4 default`
 
 Steps to run:
-On one of your hosts you have to run vsomeipd.sh and service.sh from build/build/scripts directory. Make `cd build/build/scripts` before run them.
-On another of your hosts you have to run client.sh from build/build/scripts directory. Make `cd build/build/scripts` before run them.
+On one of your hosts you have to run vsomeipd.sh and service.sh from build/scripts directory. Make `cd build/scripts` before run them.
+On another of your hosts you have to run client.sh from build/scripts directory. Make `cd build/scripts` before run them.
 
