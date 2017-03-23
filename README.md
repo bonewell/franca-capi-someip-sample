@@ -16,7 +16,9 @@ In order to have less issues while building and running this sample, do next:
 
 Also you might read our [WiKi article](https://github.com/bonewell/franca-capi-someip-sample/wiki)
 
-If you are interested in QNX 6.6 you might look at [Build for QNX 6.6](https://github.com/bonewell/franca-capi-someip-sample/wiki/Build-for-QNX-6.6)
+If you are interested in QNX you might look at
+ [Build for QNX 6.6](https://github.com/bonewell/franca-capi-someip-sample/wiki/Build-for-QNX-6.6) and
+ [Build for QNX 7.0](https://github.com/bonewell/franca-capi-someip-sample/wiki/Build-for-QNX-7.0)
 
 Steps to build and install of this sample:
 ```Shell
@@ -61,7 +63,7 @@ In order to run the sample you need two hosts (two PC or two virtual machines).
 Set up the sample for your network (see build/build/config/vsomeip-service.json and build/build/config/vsomeip-client.json)
 Change `unicast` fields.
 Also you have to change network device in bash scripts (see build/build/scripts/vsomeipd.sh and build/build/scripts/client.sh)
-`sudo route add -net 224.0.0.0/4 dev ens33` or for QNX 6.6 `route add -net 224.0.0.0/4 default`
+`sudo route add -net 224.0.0.0/4 dev ens33` or for QNX `route add -net 224.0.0.0/4 default`
 
 Steps to run:
 On one of your hosts you have to run vsomeipd.sh and service.sh from build/scripts directory. Make `cd build/scripts` before run them.
