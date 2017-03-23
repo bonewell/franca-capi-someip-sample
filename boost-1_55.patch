@@ -1,0 +1,13 @@
+diff --git a/tools/build/v2/tools/qcc.jam b/tools/build/v2/tools/qcc.jam
+index 3b35578..fc717b7 100644
+--- a/tools/build/v2/tools/qcc.jam
++++ b/tools/build/v2/tools/qcc.jam
+@@ -219,7 +219,7 @@ if [ os.name ] = NT
+ actions piecemeal archive
+ {
+     $(RM) "$(<)"
+-    "$(CONFIG_COMMAND)" -A "$(<)" "$(>)"
++    "$(CONFIG_COMMAND)" -Vgcc_ntox86_64 -A "$(<)" "$(>)"
+ }
+ 
+ 
