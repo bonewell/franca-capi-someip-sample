@@ -37,7 +37,17 @@ make
 make install
 ```
 
-Deploy to QNX 6.6
+Build for QNX 7.0:
+```Shell
+source <QNX_SDP>/qnxsdp-env.sh
+mkdir build
+cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=../qnx_7.0.0_linux_x86_64.cmake -DCMAKE_INSTALL_PREFIX=deploy ..
+make
+make install
+```
+
+Deploy to QNX
 ```Shell
 cp <your_path>/vsomeipd deploy/bin
 cp <your_path>/libvsomeip* deploy/lib
@@ -57,3 +67,4 @@ Steps to run:
 On one of your hosts you have to run vsomeipd.sh and service.sh from build/scripts directory. Make `cd build/scripts` before run them.
 On another of your hosts you have to run client.sh from build/scripts directory. Make `cd build/scripts` before run them.
 
+**Client using TCP requires reboot OS after every run!!!**

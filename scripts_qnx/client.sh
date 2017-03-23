@@ -1,4 +1,4 @@
-sudo route add -net 224.0.0.0/4 default
+route add -net 224.0.0.0/4 default
 export LD_LIBRARY_PATH=../lib:$LD_LIBRARY_PATH
 export VSOMEIP_APPLICATION_NAME=client-sample
 export VSOMEIP_CONFIGURATION=../config/vsomeip-client.json
