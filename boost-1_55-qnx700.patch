@@ -1,0 +1,27 @@
+diff --git a/libs/filesystem/src/operations.cpp b/libs/filesystem/src/operations.cpp
+index a1504b5..01d2ba9 100644
+--- a/libs/filesystem/src/operations.cpp
++++ b/libs/filesystem/src/operations.cpp
+@@ -1410,7 +1410,8 @@ namespace detail
+     //   "http://man7.org/linux/man-pages/man2/fchmodat.2.html"
+ #   if defined(AT_FDCWD) && defined(AT_SYMLINK_NOFOLLOW) \
+       && !(defined(__SUNPRO_CC) || defined(sun)) \
+-      && !(defined(linux) || defined(__linux) || defined(__linux__))
++      && !(defined(linux) || defined(__linux) || defined(__linux__)) \
++      && !(defined(__QNX__) || defined(__QNXNTO__))
+       if (::fchmodat(AT_FDCWD, p.c_str(), mode_cast(prms),
+            !(prms & symlink_perms) ? 0 : AT_SYMLINK_NOFOLLOW))
+ #   else  // fallback if fchmodat() not supported
+diff --git a/tools/build/v2/tools/qcc.jam b/tools/build/v2/tools/qcc.jam
+index 3b35578..fc717b7 100644
+--- a/tools/build/v2/tools/qcc.jam
++++ b/tools/build/v2/tools/qcc.jam
+@@ -219,7 +219,7 @@ if [ os.name ] = NT
+ actions piecemeal archive
+ {
+     $(RM) "$(<)"
+-    "$(CONFIG_COMMAND)" -A "$(<)" "$(>)"
++    "$(CONFIG_COMMAND)" -Vgcc_ntox86_64 -A "$(<)" "$(>)"
+ }
+ 
+ 
