@@ -1,25 +1,17 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index e07b665..e219cc9 100644
+index e07b665..b8e4d71 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -9,6 +9,7 @@ project (CommonAPI-SomeIP)
- 
- set (CMAKE_VERBOSE_MAKEFILE off)
- 
-+set (CMAKE_CXX_STANDARD 11)
- set (LIBCOMMONAPI_SOMEIP_MAJOR_VERSION 3)
- set (LIBCOMMONAPI_SOMEIP_MINOR_VERSION 1)
- set (LIBCOMMONAPI_SOMEIP_PATCH_VERSION 10)
-@@ -57,7 +58,7 @@ include_directories( ${Boost_INCLUDE_DIR} )
+@@ -57,7 +57,7 @@ include_directories( ${Boost_INCLUDE_DIR} )
  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CRT_SECURE_NO_WARNINGS /wd4503")
  link_directories(${Boost_LIBRARY_DIR})
  else()
 -set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -Wextra -Wformat -Wformat-security -Wconversion -fexceptions -fstrict-aliasing -fstack-protector -fasynchronous-unwind-tables -fno-omit-frame-pointer -DCOMMONAPI_INTERNAL_COMPILATION -D_GLIBCXX_USE_NANOSLEEP")
-+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wformat -Wformat-security -Wconversion -fexceptions -fstrict-aliasing -fstack-protector -fasynchronous-unwind-tables -fno-omit-frame-pointer -DCOMMONAPI_INTERNAL_COMPILATION -D_GLIBCXX_USE_NANOSLEEP")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Wextra -Wformat -Wformat-security -Wconversion -fexceptions -fstrict-aliasing -fstack-protector -fasynchronous-unwind-tables -fno-omit-frame-pointer -DCOMMONAPI_INTERNAL_COMPILATION -D_GLIBCXX_USE_NANOSLEEP")
  endif()
  
  SET(MAX_LOG_LEVEL "DEBUG" CACHE STRING "maximum log level")
-@@ -79,6 +80,7 @@ endmacro ()
+@@ -79,6 +79,7 @@ endmacro ()
  if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
      set (OS "LINUX")
      set (NO_DEPRECATED_REGISTER "")
@@ -27,7 +19,7 @@ index e07b665..e219cc9 100644
  endif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
  
  if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
-@@ -86,8 +88,14 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+@@ -86,8 +87,14 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
      set (NO_DEPRECATED_REGISTER "-Wno-deprecated-register")
  endif (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
  
@@ -39,7 +31,7 @@ index e07b665..e219cc9 100644
 +
  if (NOT MSVC)
 -    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${OS} ${NO_DEPRECATED_REGISTER} -DBOOST_LOG_DYN_LINK -pthread -g -std=c++0x -O0")
-+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${OS} ${NO_DEPRECATED_REGISTER} -DBOOST_LOG_DYN_LINK -g -O0")
++    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D${OS} ${NO_DEPRECATED_REGISTER} -DBOOST_LOG_DYN_LINK -g -std=gnu++11 -O0")
  endif()
  # END TEMPORARY WORKAROUND #
  
