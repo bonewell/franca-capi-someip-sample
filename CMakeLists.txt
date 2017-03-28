@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-set(CMAKE_CXX_STANDARD 11)
 set(SCRIPTS_DIR scripts)
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
@@ -10,6 +9,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "QNX")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
     set(SCRIPTS_DIR scripts_qnx)
 endif(${CMAKE_SYSTEM_NAME} MATCHES "QNX")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
 set(COMMONAPI /home/kolodiy/git/genivi)
 set(FIDL ${CMAKE_SOURCE_DIR}/fidl)
